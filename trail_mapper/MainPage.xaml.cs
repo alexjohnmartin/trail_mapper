@@ -1,0 +1,41 @@
+﻿using System;
+using System.Net;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+
+//running location tracking apps in the background
+//http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj662935%28v=vs.105%29.aspx
+
+namespace trail_mapper
+{
+    public partial class MainPage : PhoneApplicationPage
+    {
+        // Constructor
+        public MainPage()
+        {
+            InitializeComponent();
+
+            // Set the data context of the listbox control to the sample data
+            DataContext = App.ViewModel;
+        }
+
+        // Load data for the ViewModel Items
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (!App.ViewModel.IsDataLoaded)
+            {
+                App.ViewModel.LoadData();
+            }
+        }
+
+        private void NewTrailButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative)); 
+        }
+    }
+}
