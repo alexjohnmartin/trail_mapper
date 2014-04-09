@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using trail_mapper.ViewModels;
 
 //running location tracking apps in the background
 //http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj662935%28v=vs.105%29.aspx
@@ -35,7 +36,14 @@ namespace trail_mapper
 
         private void NewTrailButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative)); 
+            NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
+        }
+
+        private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var trailMap = (TrailMap)((StackPanel)sender).Tag;
+            App.ViewModel.SelectedTrail = trailMap; 
+            NavigationService.Navigate(new Uri("/TrailDisplayPage.xaml", UriKind.Relative));
         }
     }
 }

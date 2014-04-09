@@ -20,6 +20,7 @@ namespace trail_mapper.ViewModels
         public ObservableCollection<ItemViewModel> Items { get; private set; }
         public ObservableCollection<TrailMap> MapItems { get; private set; }
         public IList<HistoryItem> TrailHistory { get; set; }
+        public TrailMap SelectedTrail;
 
         public bool IsDataLoaded
         {
