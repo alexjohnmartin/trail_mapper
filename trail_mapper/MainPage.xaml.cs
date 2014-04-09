@@ -42,6 +42,7 @@ namespace trail_mapper
         private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var trailMap = (TrailMap)((StackPanel)sender).Tag;
+            trailMap.CleanUpData();
             App.ViewModel.SelectedTrail = trailMap; 
             NavigationService.Navigate(new Uri("/TrailDisplayPage.xaml", UriKind.Relative));
         }

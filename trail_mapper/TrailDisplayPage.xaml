@@ -47,7 +47,7 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TotalDistance}" Style="{StaticResource PhoneTextNormalStyle}"/>
 
             <maps:Map x:Name="HereMap" 
-                      ZoomLevel="10" 
+                      ZoomLevel="17" 
                       Pitch="0" 
                       CartographicMode="Hybrid" 
                       Grid.Row="2" Grid.ColumnSpan="2"/>
