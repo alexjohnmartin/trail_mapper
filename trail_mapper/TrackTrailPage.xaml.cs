@@ -30,6 +30,14 @@ namespace trail_mapper
                 App.Geolocator.DesiredAccuracy = PositionAccuracy.High;
                 App.Geolocator.MovementThreshold = 10; // The units are meters.
             }
+            UpdateButtons(); 
+        }
+
+        private void UpdateButtons()
+        {
+            StartTrackingButton.IsEnabled = App.ViewModel.State == RecordingState.New;
+            StopTrackingButton.IsEnabled = App.ViewModel.State == RecordingState.RecordingStarted;
+            SaveButton.IsEnabled = App.ViewModel.State == RecordingState.RecordingFinished;
         }
 
         protected override void OnRemovedFromJournal(System.Windows.Navigation.JournalEntryRemovedEventArgs e)
@@ -65,9 +73,8 @@ namespace trail_mapper
 
         private async void StartTrackingButton_Click(object sender, RoutedEventArgs e)
         {
-            StartTrackingButton.IsEnabled = false;
-            StopTrackingButton.IsEnabled = true;
-            SaveButton.IsEnabled = false;
+            App.ViewModel.State = RecordingState.RecordingStarted;
+            UpdateButtons();
 
             App.ViewModel.TrailHistory = new List<HistoryItem>();
             App.Geolocator.PositionChanged += geolocator_PositionChanged;
@@ -81,9 +88,8 @@ namespace trail_mapper
 
         private void StopTrackingButton_Click(object sender, RoutedEventArgs e)
         {
-            StartTrackingButton.IsEnabled = true;
-            StopTrackingButton.IsEnabled = false;
-            SaveButton.IsEnabled = true;
+            App.ViewModel.State = RecordingState.RecordingFinished;
+            UpdateButtons();
 
             App.Geolocator.PositionChanged -= geolocator_PositionChanged;
             App.Geolocator = null;
@@ -91,7 +97,8 @@ namespace trail_mapper
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var trailMap = new TrailMap { Name = TrailNameTextbox.Text, History = App.ViewModel.TrailHistory };
+            var trailName = string.IsNullOrEmpty(TrailNameTextbox.Text) ? "(no name)" : TrailNameTextbox.Text;
+            var trailMap = new TrailMap { Name = trailName, History = App.ViewModel.TrailHistory };
             var json = JsonConvert.SerializeObject(trailMap);
 
             using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
@@ -107,7 +114,9 @@ namespace trail_mapper
                 }
             }
 
-            App.ViewModel.AddTrailHistory(trailMap); 
+            App.ViewModel.AddTrailHistory(trailMap);
+            App.ViewModel.State = RecordingState.Saved;
+            NavigationService.GoBack();
         }
     }
 }

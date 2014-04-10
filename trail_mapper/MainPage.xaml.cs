@@ -32,10 +32,14 @@ namespace trail_mapper
             {
                 App.ViewModel.LoadData();
             }
+
+            if (App.ViewModel.State == RecordingState.RecordingStarted)
+                NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
         }
 
         private void NewTrailButton_Click(object sender, RoutedEventArgs e)
         {
+            App.ViewModel.State = RecordingState.New; 
             NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
         }
 

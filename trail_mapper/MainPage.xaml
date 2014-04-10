@@ -25,20 +25,22 @@
 
             <!--Panorama item one-->
             <phone:PanoramaItem Header="first item">
-                <StackPanel>
-                    <Button Name="NewTrailButton" Click="NewTrailButton_Click">
-                        <TextBlock Text="new trail"/>
-                    </Button>
-                    <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding MapItems}">
-                        <phone:LongListSelector.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="0,-6,0,12" Tap="StackPanel_Tap" Tag="{Binding}">
-                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </phone:LongListSelector.ItemTemplate>
-                    </phone:LongListSelector>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel>
+                        <Button Name="NewTrailButton" Click="NewTrailButton_Click">
+                            <TextBlock Text="new trail"/>
+                        </Button>
+                        <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding MapItems}">
+                            <phone:LongListSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,-6,0,12" Tap="StackPanel_Tap" Tag="{Binding}">
+                                        <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </phone:LongListSelector.ItemTemplate>
+                        </phone:LongListSelector>
+                    </StackPanel>
+                </ScrollViewer>
             </phone:PanoramaItem>
 
             <!--Panorama item two-->
