@@ -103,7 +103,7 @@ namespace trail_mapper
 
             using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                using (var stream = iso.CreateFile(DateTime.Now.ToString("yyyyMMddHHmmss") + ".json"))
+                using (var stream = iso.CreateFile(trailMap.Id.ToString() + ".json"))
                 {
                     using (StreamWriter writer = new StreamWriter(stream))
                     {

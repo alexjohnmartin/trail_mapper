@@ -7,8 +7,14 @@ namespace trail_mapper.ViewModels
 {
     public class TrailMap
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public IList<HistoryItem> History { get; set; }
+
+        public TrailMap()
+        {
+            Id = Guid.NewGuid();
+        }
 
         public TimeSpan TotalTime
         {

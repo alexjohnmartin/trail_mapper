@@ -43,11 +43,8 @@ namespace trail_mapper.ViewModels
                             using (StreamReader reader = new StreamReader(isoStream))
                             {
                                 var json = reader.ReadToEnd();
-                                if (json.Contains("Name"))
-                                {
-                                    var trailMap = JsonConvert.DeserializeObject<TrailMap>(json);
-                                    MapItems.Add(trailMap);
-                                }
+                                var trailMap = JsonConvert.DeserializeObject<TrailMap>(json);
+                                MapItems.Add(trailMap);
                             }
                         }                        
                     }
@@ -74,6 +71,12 @@ namespace trail_mapper.ViewModels
                 MapItems.Add(trailMap);
                 NotifyPropertyChanged("MapItems");
             }
+        }
+
+        internal void RemoveTrailMap(TrailMap trailMap)
+        {
+            MapItems.Remove(trailMap);
+            NotifyPropertyChanged("MapItems");
         }
     }
 }

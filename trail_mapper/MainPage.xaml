@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -35,6 +36,13 @@
                                 <DataTemplate>
                                     <StackPanel Margin="0,-6,0,12" Tap="StackPanel_Tap" Tag="{Binding}">
                                         <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+                                        <toolkit:ContextMenuService.ContextMenu>
+                                            <toolkit:ContextMenu IsZoomEnabled="True">
+                                                <!--<toolkit:MenuItem Header="export" Click="Export_Click" Tag="{Binding}"/>-->
+                                                <!--<toolkit:MenuItem Header="share" Click="Share_Click" Tag="{Binding}"/>-->
+                                                <toolkit:MenuItem Header="delete" Click="Delete_Click" Tag="{Binding}"/>
+                                            </toolkit:ContextMenu>
+                                        </toolkit:ContextMenuService.ContextMenu>
                                     </StackPanel>
                                 </DataTemplate>
                             </phone:LongListSelector.ItemTemplate>
