@@ -51,24 +51,27 @@ namespace trail_mapper
 
         private void geolocator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
-            if (!App.RunningInBackground)
+            if (args.Position.Coordinate.PositionSource == PositionSource.Satellite)
             {
-                Dispatcher.BeginInvoke(() =>
+                if (!App.RunningInBackground)
                 {
-                    LatitudeTextBlock.Text = args.Position.Coordinate.Latitude.ToString();
-                    LongitudeTextBlock.Text = args.Position.Coordinate.Longitude.ToString();
-                });
-            }
-            else
-            {
-                //Microsoft.Phone.Shell.ShellToast toast = new Microsoft.Phone.Shell.ShellToast();
-                //toast.Content = args.Position.Coordinate.Latitude.ToString("0.00");
-                //toast.Title = "Location: ";
-                //toast.NavigationUri = new Uri("/Page2.xaml", UriKind.Relative);
-                //toast.Show();
-            }
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        LatitudeTextBlock.Text = args.Position.Coordinate.Latitude.ToString();
+                        LongitudeTextBlock.Text = args.Position.Coordinate.Longitude.ToString();
+                    });
+                }
+                //else
+                //{
+                //    Microsoft.Phone.Shell.ShellToast toast = new Microsoft.Phone.Shell.ShellToast();
+                //    toast.Content = args.Position.Coordinate.Latitude.ToString("0.00");
+                //    toast.Title = "Location: ";
+                //    toast.NavigationUri = new Uri("/Page2.xaml", UriKind.Relative);
+                //    toast.Show();
+                //}
 
-            App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude }); 
+                App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude });
+            }
         }
 
         private async void StartTrackingButton_Click(object sender, RoutedEventArgs e)
@@ -81,9 +84,12 @@ namespace trail_mapper
 
             var locator = new Geolocator();
             Geoposition position = await locator.GetGeopositionAsync();
-            LatitudeTextBlock.Text = position.Coordinate.Latitude.ToString();
-            LongitudeTextBlock.Text = position.Coordinate.Longitude.ToString();
-            App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude }); 
+            if (position.Coordinate.PositionSource == PositionSource.Satellite)
+            {
+                LatitudeTextBlock.Text = position.Coordinate.Latitude.ToString();
+                LongitudeTextBlock.Text = position.Coordinate.Longitude.ToString();
+                App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude });
+            }
         }
 
         private void StopTrackingButton_Click(object sender, RoutedEventArgs e)
