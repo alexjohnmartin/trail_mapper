@@ -19,23 +19,30 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
 
          <!--Panorama control-->
-        <phone:Panorama Title="my application">
-            <phone:Panorama.Background>
-                <ImageBrush ImageSource="/trail_mapper;component/Assets/PanoramaBackground.png"/>
-            </phone:Panorama.Background>
+        <phone:Panorama Title="blah" Margin="0,-190,0,0">
+            <!--<phone:Panorama.Background>
+                <ImageBrush ImageSource="/trail_mapper;component/Assets/HoneycombBackground.png"/>
+            </phone:Panorama.Background>-->
 
             <!--Panorama item one-->
-            <phone:PanoramaItem Header="first item">
-                <ScrollViewer>
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.TrailMapsHeader, Source={StaticResource LocalizedStrings}}">
+                <ScrollViewer Margin="0,-50">
                     <StackPanel>
                         <Button Name="NewTrailButton" Click="NewTrailButton_Click">
-                            <TextBlock Text="new trail"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.RecordNewTrailButton, Source={StaticResource LocalizedStrings}}"/>
                         </Button>
                         <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding MapItems}">
                             <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="0,-6,0,12" Tap="StackPanel_Tap" Tag="{Binding}">
-                                        <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="12,2,0,4" 
+                                                Height="105" Width="432" Name="SongPanel" 
+                                                Tap="StackPanel_Tap" Tag="{Binding}">
+                                        <Border BorderThickness="1" Width="10" Height="99" BorderBrush="#FFFFC700" Background="#FFFFC700"/>
+                                        <!--<Image Source="{Binding AlbumArt}" Width="100" Height="100"/>-->
+                                        <StackPanel Width="311" Margin="12,-7,0,0">
+                                            <TextBlock Text="{Binding Name}" Margin="0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                        </StackPanel>
                                         <toolkit:ContextMenuService.ContextMenu>
                                             <toolkit:ContextMenu IsZoomEnabled="True">
                                                 <!--<toolkit:MenuItem Header="export" Click="Export_Click" Tag="{Binding}"/>-->
@@ -51,6 +58,54 @@
                 </ScrollViewer>
             </phone:PanoramaItem>
 
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.AboutHeader, Source={StaticResource LocalizedStrings}}">
+                <Grid x:Name="AboutPanel" Grid.Row="1" Margin="0,-40,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="200" />
+                        <RowDefinition Height="200" />
+                        <RowDefinition Height="200" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="{Binding Path=LocalizedResources.AboutDescription, Source={StaticResource LocalizedStrings}}"
+                               Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                               TextWrapping="Wrap" Margin="12, 0, 0, 0"/>
+
+                    <Button Name="TwitterButton" Click="TwitterButton_Click" Background="Red" BorderThickness="0" Grid.Column="0" Grid.Row="1">
+                        <StackPanel>
+                            <Image Source="Assets/About/appbar.social.twitter.png" MaxHeight="120" />
+                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonTwitter, Source={StaticResource LocalizedStrings}}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="ReviewButton" Click="ReviewButton_Click" Background="OrangeRed" BorderThickness="0" Grid.Column="1" Grid.Row="1">
+                        <StackPanel>
+                            <Image Source="Assets/About/appbar.message.smiley.png" MaxHeight="120" />
+                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonReview, Source={StaticResource LocalizedStrings}}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="EmailButton" Click="EmailButton_Click" Background="Goldenrod" BorderThickness="0" Grid.Column="0" Grid.Row="2">
+                        <StackPanel>
+                            <Image Source="Assets/About/appbar.email.png" MaxHeight="120" />
+                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonEmail, Source={StaticResource LocalizedStrings}}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="StoreButton" Click="StoreButton_Click" Background="Green" BorderThickness="0" Grid.Column="1" Grid.Row="2">
+                        <StackPanel>
+                            <Image Source="Assets/About/appbar.marketplace.png" MaxHeight="120" />
+                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonStore, Source={StaticResource LocalizedStrings}}" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </phone:PanoramaItem>
+            
             <!--Panorama item two-->
             <!--<phone:PanoramaItem>
                 <phone:LongListSelector Margin="0,-38,-22,2" ItemsSource="{Binding Items}">

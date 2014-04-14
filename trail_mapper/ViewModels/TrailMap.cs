@@ -27,6 +27,14 @@ namespace trail_mapper.ViewModels
             }
         }
 
+        public string FormattedTotalTime
+        { 
+            get
+            {
+                return TotalTime.ToString(@"h\:mm\:ss");
+            }
+        }
+
         public double TotalDistance
         {
             get
@@ -40,6 +48,26 @@ namespace trail_mapper.ViewModels
                     total += new GeoCoordinate(History[i].Latitude, History[i].Longitude, History[i].Altitude).GetDistanceTo(new GeoCoordinate(History[i-1].Latitude, History[i-1].Longitude, History[i-1].Altitude)); 
                 }
                 return total;
+            }
+        }
+
+        public string FormattedTotalDistance
+        {
+            get
+            {
+                var distance = TotalDistance;
+                if (distance < 1000) return distance + "m";
+                return (distance / 1000).ToString("0.00") + "km";
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return string.Format(Resources.AppResources.LocationDescription, 
+                    FormattedTotalDistance, 
+                    FormattedTotalTime); 
             }
         }
 
