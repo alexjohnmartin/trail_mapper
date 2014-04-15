@@ -23,15 +23,18 @@
             <!--<phone:Panorama.Background>
                 <ImageBrush ImageSource="/trail_mapper;component/Assets/HoneycombBackground.png"/>
             </phone:Panorama.Background>-->
+            <!--<phone:Panorama.Background>
+                <ImageBrush ImageSource="/Assets/AlignmentGrid.png"/>
+            </phone:Panorama.Background>-->
 
             <!--Panorama item one-->
             <phone:PanoramaItem Header="{Binding Path=LocalizedResources.TrailMapsHeader, Source={StaticResource LocalizedStrings}}">
-                <ScrollViewer Margin="0,-50">
+                <ScrollViewer Margin="0,-28,0,0">
                     <StackPanel>
                         <Button Name="NewTrailButton" Click="NewTrailButton_Click">
                             <TextBlock Text="{Binding Path=LocalizedResources.RecordNewTrailButton, Source={StaticResource LocalizedStrings}}"/>
                         </Button>
-                        <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding MapItems}">
+                        <phone:LongListSelector Margin="12,28,12,0" ItemsSource="{Binding MapItems}">
                             <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="12,2,0,4" 
@@ -57,19 +60,49 @@
                     </StackPanel>
                 </ScrollViewer>
             </phone:PanoramaItem>
-
-            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.AboutHeader, Source={StaticResource LocalizedStrings}}">
-                <Grid x:Name="AboutPanel" Grid.Row="1" Margin="0,-40,0,0">
+            
+            <phone:PanoramaItem Header="Settings">
+                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,-24,0,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="200" />
-                        <RowDefinition Height="200" />
-                        <RowDefinition Height="200" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="80" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAllowLocation, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="12,0,0,0"/>
+                    <CheckBox Name="AllowLocationCheckbox"
+                              Checked="AllowLocationCheckbox_Checked"
+                              Unchecked="AllowLocationCheckbox_Unchecked"
+                              Grid.Row="0"
+                              Grid.Column="1"
+                              Margin="0,-18,0,0"
+                              VerticalAlignment="Top"/>
+                </Grid>
+            </phone:PanoramaItem>
+
+            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.AboutHeader, Source={StaticResource LocalizedStrings}}">
+                <Grid x:Name="AboutPanel" Grid.Row="1" Margin="0,-24,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="85" />
+                        <RowDefinition Height="210" />
+                        <RowDefinition Height="210" />
+                        <RowDefinition Height="210" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="{Binding Path=LocalizedResources.AboutDescription, Source={StaticResource LocalizedStrings}}"

@@ -37,6 +37,14 @@ namespace trail_mapper
 
             if (App.ViewModel.State == RecordingState.RecordingStarted)
                 NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
+
+            if (e.NavigationMode == NavigationMode.New)
+                if (!IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent"))
+                    PromptIfWeCanUseUsersLocation();
+
+            var locationEnabled = (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
+            NewTrailButton.IsEnabled = locationEnabled;
+            AllowLocationCheckbox.IsChecked = locationEnabled;
         }
 
         private void NewTrailButton_Click(object sender, RoutedEventArgs e)
@@ -98,6 +106,34 @@ namespace trail_mapper
             var email = new EmailComposeTask();
             email.Subject = "Feedback for the Calendar Tile application";
             email.Show();
+        }
+
+        private void AllowLocationCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
+            NewTrailButton.IsEnabled = true;
+        }
+
+        private void AllowLocationCheckbox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
+            NewTrailButton.IsEnabled = false;
+        }
+
+        private void PromptIfWeCanUseUsersLocation()
+        {
+            //If they didn't we ask for it
+            MessageBoxResult result = MessageBox.Show(trail_mapper.Resources.AppResources.LocationPrivacyPolicyBody, trail_mapper.Resources.AppResources.LocationPrivacyPolicyTitle, MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
+            {
+                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
+            }
+
+            IsolatedStorageSettings.ApplicationSettings.Save();
         }
     }
 }

@@ -162,4 +162,13 @@
   <data name="TrailMapsHeader" xml:space="preserve">
     <value>Trail maps</value>
   </data>
+  <data name="LocationPrivacyPolicyBody" xml:space="preserve">
+    <value>Can this application use your location? Your position will only be tracked when you are recording a trail.</value>
+  </data>
+  <data name="LocationPrivacyPolicyTitle" xml:space="preserve">
+    <value>Location tracking</value>
+  </data>
+  <data name="SettingsAllowLocation" xml:space="preserve">
+    <value>Can this application use your location?</value>
+  </data>
 </root>

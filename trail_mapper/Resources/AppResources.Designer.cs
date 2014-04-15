@@ -133,6 +133,24 @@ namespace trail_mapper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can this application use your location? Your position will only be tracked when you are recording a trail..
+        /// </summary>
+        public static string LocationPrivacyPolicyBody {
+            get {
+                return ResourceManager.GetString("LocationPrivacyPolicyBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location tracking.
+        /// </summary>
+        public static string LocationPrivacyPolicyTitle {
+            get {
+                return ResourceManager.GetString("LocationPrivacyPolicyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to record a new trail.
         /// </summary>
         public static string RecordNewTrailButton {
@@ -156,6 +174,15 @@ namespace trail_mapper.Resources {
         public static string ResourceLanguage {
             get {
                 return ResourceManager.GetString("ResourceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can this application use your location?.
+        /// </summary>
+        public static string SettingsAllowLocation {
+            get {
+                return ResourceManager.GetString("SettingsAllowLocation", resourceCulture);
             }
         }
         
