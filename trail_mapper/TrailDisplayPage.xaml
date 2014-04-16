@@ -50,7 +50,8 @@
                       ZoomLevel="17" 
                       Pitch="0" 
                       CartographicMode="Hybrid" 
-                      Grid.Row="2" Grid.ColumnSpan="2"/>
+                      Grid.Row="2" Grid.ColumnSpan="2"
+                      Loaded="HereMap_Loaded"/>
         </Grid>
     </Grid>
 

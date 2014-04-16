@@ -34,7 +34,7 @@
                         <Button Name="NewTrailButton" Click="NewTrailButton_Click">
                             <TextBlock Text="{Binding Path=LocalizedResources.RecordNewTrailButton, Source={StaticResource LocalizedStrings}}"/>
                         </Button>
-                        <phone:LongListSelector Margin="12,28,12,0" ItemsSource="{Binding MapItems}">
+                        <phone:LongListSelector Margin="12,0,12,0" ItemsSource="{Binding MapItems}">
                             <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="0,2,0,4" 
@@ -48,8 +48,7 @@
                                         </StackPanel>
                                         <toolkit:ContextMenuService.ContextMenu>
                                             <toolkit:ContextMenu IsZoomEnabled="True">
-                                                <!--<toolkit:MenuItem Header="export" Click="Export_Click" Tag="{Binding}"/>-->
-                                                <!--<toolkit:MenuItem Header="share" Click="Share_Click" Tag="{Binding}"/>-->
+                                                <!--<toolkit:MenuItem Header="email data" Click="ShareData_Click" Tag="{Binding}"/>-->
                                                 <toolkit:MenuItem Header="delete" Click="Delete_Click" Tag="{Binding}"/>
                                             </toolkit:ContextMenu>
                                         </toolkit:ContextMenuService.ContextMenu>

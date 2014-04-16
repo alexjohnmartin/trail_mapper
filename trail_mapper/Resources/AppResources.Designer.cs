@@ -115,6 +115,24 @@ namespace trail_mapper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete map.
+        /// </summary>
+        public static string AppBarDeleteButtonText {
+            get {
+                return ResourceManager.GetString("AppBarDeleteButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email map data.
+        /// </summary>
+        public static string AppBarShareDataButtonText {
+            get {
+                return ResourceManager.GetString("AppBarShareDataButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trail Mapper.
         /// </summary>
         public static string ApplicationTitle {

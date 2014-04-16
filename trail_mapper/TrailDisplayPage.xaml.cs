@@ -10,6 +10,9 @@ using Microsoft.Phone.Shell;
 using Microsoft.Phone.Maps.Controls;
 using System.Windows.Media;
 using System.Device.Location;
+using Microsoft.Phone.Tasks;
+using Newtonsoft.Json;
+using System.IO.IsolatedStorage;
 
 namespace trail_mapper
 {
@@ -19,6 +22,45 @@ namespace trail_mapper
         {
             InitializeComponent();
             DataContext = App.ViewModel.SelectedTrail;
+            BuildApplicationBar();
+        }
+
+        private void BuildApplicationBar()
+        {
+            ApplicationBar = new ApplicationBar();
+
+            var DeleteButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.delete.png", UriKind.Relative));
+            DeleteButton.Text = trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
+            DeleteButton.Click += Delete_Click;
+            ApplicationBar.Buttons.Add(DeleteButton);
+
+            //var shareDataButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.database.png", UriKind.Relative));
+            //shareDataButton.Text = trail_mapper.Resources.AppResources.AppBarShareDataButtonText;
+            //shareDataButton.Click += ShareData_Click;
+            //ApplicationBar.Buttons.Add(shareDataButton);
+        }
+
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            var trailMap = App.ViewModel.SelectedTrail;
+            if (MessageBox.Show("Are you sure you want to delete this map?", "Delete " + trailMap.Name, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                //delete from isolated storage
+                using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
+                    iso.DeleteFile(trailMap.Id.ToString() + ".json");
+                //remove from view model
+                App.ViewModel.RemoveTrailMap(trailMap);
+                //go back to main page
+                NavigationService.GoBack();
+            }
+        }
+
+        private void ShareData_Click(object sender, EventArgs e)
+        {
+            var map = App.ViewModel.SelectedTrail;
+            var emailTask = new EmailComposeTask();
+            emailTask.Body = JsonConvert.SerializeObject(map);
+            emailTask.Show();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

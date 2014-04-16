@@ -10,6 +10,8 @@ using Microsoft.Phone.Shell;
 using trail_mapper.ViewModels;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Tasks;
+using Microsoft.Xna.Framework.Media;
+using Newtonsoft.Json;
 
 //running location tracking apps in the background
 //http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj662935%28v=vs.105%29.aspx
@@ -73,6 +75,15 @@ namespace trail_mapper
                 //remove from view model
                 App.ViewModel.RemoveTrailMap(trailMap); 
             }
+        }
+
+        private void ShareData_Click(object sender, EventArgs e)
+        {
+            var item = (MenuItem)sender;
+            var map = (TrailMap)item.Tag;
+            var emailTask = new EmailComposeTask();
+            emailTask.Body = JsonConvert.SerializeObject(map);
+            emailTask.Show();
         }
 
         public void TwitterButton_Click(object sender, EventArgs e)

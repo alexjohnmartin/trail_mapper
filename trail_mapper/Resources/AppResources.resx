@@ -171,4 +171,10 @@
   <data name="SettingsAllowLocation" xml:space="preserve">
     <value>Can this application use your location?</value>
   </data>
+  <data name="AppBarDeleteButtonText" xml:space="preserve">
+    <value>Delete map</value>
+  </data>
+  <data name="AppBarShareDataButtonText" xml:space="preserve">
+    <value>Email map data</value>
+  </data>
 </root>
