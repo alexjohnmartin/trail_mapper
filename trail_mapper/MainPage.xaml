@@ -19,7 +19,7 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
 
          <!--Panorama control-->
-        <phone:Panorama Title="blah" Margin="0,-190,0,0">
+        <phone:Panorama Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Margin="0,0,0,0">
             <!--<phone:Panorama.Background>
                 <ImageBrush ImageSource="/trail_mapper;component/Assets/HoneycombBackground.png"/>
             </phone:Panorama.Background>-->
