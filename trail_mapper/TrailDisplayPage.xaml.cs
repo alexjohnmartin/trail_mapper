@@ -36,7 +36,17 @@ namespace trail_mapper
             dynamicPolyline.Path = gc;
 
             HereMap.MapElements.Add(dynamicPolyline);
-            HereMap.Center = App.ViewModel.SelectedTrail.Centre; 
+            HereMap.Center = App.ViewModel.SelectedTrail.Centre;
+        }
+
+        private void HereMap_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (App.ViewModel.SelectedTrail.History.Count > 0)
+            {
+                var array = App.ViewModel.SelectedTrail.History.Select(i => new GeoCoordinate(i.Latitude, i.Longitude)).ToArray();
+                var boundingRectangle = LocationRectangle.CreateBoundingRectangle(array);
+                HereMap.SetView(boundingRectangle);
+            }
         }
     }
 }
