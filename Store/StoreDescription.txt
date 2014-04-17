@@ -1,0 +1,8 @@
+Record your favorite trails, map your travels, measure your effort and track your training.
+
+
+Privacy policy
+=====================
+This application will search for your location to within 10 meters, it only does this when you are recording a trail.
+It stores your location data on your device, no other apps can access this data.
+It does NOT share it with anyone other than who you explicity choose to send it to.
