@@ -13,6 +13,10 @@ using System.Device.Location;
 using Microsoft.Phone.Tasks;
 using Newtonsoft.Json;
 using System.IO.IsolatedStorage;
+using System.Windows.Media.Imaging;
+using System.IO;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Media.PhoneExtensions;
 
 namespace trail_mapper
 {
@@ -29,15 +33,15 @@ namespace trail_mapper
         {
             ApplicationBar = new ApplicationBar();
 
+            var shareDataButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.map.treasure.png", UriKind.Relative));
+            shareDataButton.Text = trail_mapper.Resources.AppResources.AppBarShareDataButtonText;
+            shareDataButton.Click += ShareData_Click;
+            ApplicationBar.Buttons.Add(shareDataButton);
+
             var DeleteButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.delete.png", UriKind.Relative));
             DeleteButton.Text = trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
             DeleteButton.Click += Delete_Click;
             ApplicationBar.Buttons.Add(DeleteButton);
-
-            //var shareDataButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.database.png", UriKind.Relative));
-            //shareDataButton.Text = trail_mapper.Resources.AppResources.AppBarShareDataButtonText;
-            //shareDataButton.Click += ShareData_Click;
-            //ApplicationBar.Buttons.Add(shareDataButton);
         }
 
         private void Delete_Click(object sender, EventArgs e)
@@ -57,10 +61,35 @@ namespace trail_mapper
 
         private void ShareData_Click(object sender, EventArgs e)
         {
-            var map = App.ViewModel.SelectedTrail;
-            var emailTask = new EmailComposeTask();
-            emailTask.Body = JsonConvert.SerializeObject(map);
-            emailTask.Show();
+            var filePath = SaveMapImageToMediaLibrary();
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                ShareMediaTask shareTask = new ShareMediaTask();
+                shareTask.FilePath = filePath;
+                shareTask.Show();
+            }
+        }
+
+        private string SaveMapImageToMediaLibrary()
+        {
+            var bitmap = new WriteableBitmap(LayoutRoot, null);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.SaveJpeg(stream, bitmap.PixelWidth, bitmap.PixelHeight, 0, 100);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
+                {
+                    if (source.MediaSourceType == MediaSourceType.LocalDevice)
+                    {
+                        var mediaLibrary = new MediaLibrary(source);
+                        var filename = "trailmap-" + App.ViewModel.SelectedTrail.Name.Replace(" ", "-");
+                        var picture = mediaLibrary.SavePicture(filename, stream);
+                        return picture.GetPath();
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
