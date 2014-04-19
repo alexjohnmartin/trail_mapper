@@ -172,7 +172,7 @@ namespace trail_mapper
 
             NewTrailButton.IsEnabled = locationEnabled;
             AllowLocationCheckbox.IsChecked = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") && (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
-            _updating = true;
+            _updating = false;
         }
     }
 }
