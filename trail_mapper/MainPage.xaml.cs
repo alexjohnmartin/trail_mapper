@@ -12,6 +12,7 @@ using System.IO.IsolatedStorage;
 using Microsoft.Phone.Tasks;
 using Microsoft.Xna.Framework.Media;
 using Newtonsoft.Json;
+using Windows.Devices.Geolocation;
 
 //running location tracking apps in the background
 //http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj662935%28v=vs.105%29.aspx
@@ -37,16 +38,19 @@ namespace trail_mapper
                 App.ViewModel.LoadData();
             }
 
+            UpdateRecordTrailButton();
+            
             if (App.ViewModel.State == RecordingState.RecordingStarted)
                 NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
 
             if (e.NavigationMode == NavigationMode.New)
+            {
+                if (App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled))
+                    MessageBox.Show("Location services are disabled on your device, you will not be able to record new trails until you enable this in your device's settings", "Location disabled", MessageBoxButton.OK);
+
                 if (!IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent"))
                     PromptIfWeCanUseUsersLocation();
-
-            var locationEnabled = (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
-            NewTrailButton.IsEnabled = locationEnabled;
-            AllowLocationCheckbox.IsChecked = locationEnabled;
+            }
         }
 
         private void NewTrailButton_Click(object sender, RoutedEventArgs e)
@@ -121,14 +125,20 @@ namespace trail_mapper
 
         private void AllowLocationCheckbox_Checked(object sender, RoutedEventArgs e)
         {
-            IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
-            NewTrailButton.IsEnabled = true;
+            if (!_updating)
+            {
+                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
+                UpdateRecordTrailButton();
+            }
         }
 
         private void AllowLocationCheckbox_Unchecked(object sender, RoutedEventArgs e)
         {
-            IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
-            NewTrailButton.IsEnabled = false;
+            if (!_updating)
+            {
+                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
+                UpdateRecordTrailButton();
+            }
         }
 
         private void PromptIfWeCanUseUsersLocation()
@@ -144,7 +154,25 @@ namespace trail_mapper
                 IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
             }
 
+            UpdateRecordTrailButton();
             IsolatedStorageSettings.ApplicationSettings.Save();
+        }
+
+        private bool _updating = false;
+        private void UpdateRecordTrailButton()
+        {
+            _updating = true;
+            if (App.Geolocator == null)
+                App.Geolocator = new Geolocator();
+
+            var locationEnabled = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") &&
+                    (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"] &&
+                    !App.Geolocator.LocationStatus.Equals(PositionStatus.NotAvailable) &&
+                    !App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled);
+
+            NewTrailButton.IsEnabled = locationEnabled;
+            AllowLocationCheckbox.IsChecked = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") && (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
+            _updating = true;
         }
     }
 }

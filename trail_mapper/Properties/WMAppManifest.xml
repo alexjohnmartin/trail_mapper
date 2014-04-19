@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{9e5b5138-4218-4ad6-8627-6c5856e42ccc}" Title="Trail Mapper" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Alex Martin" Description="Record your favorite trails, map your travels, measure your effort and track your training." Publisher="Nocturnal Tendencies" PublisherID="{26fcc0fe-a15e-4a1f-b955-4a26efb2c086}">
+  <App xmlns="" ProductID="{9e5b5138-4218-4ad6-8627-6c5856e42ccc}" Title="Trail Mapper" RuntimeType="Silverlight" Version="1.0.1.0" Genre="apps.normal" Author="Alex Martin" Description="Record your favorite trails, map your travels, measure your effort and track your training." Publisher="Nocturnal Tendencies" PublisherID="{26fcc0fe-a15e-4a1f-b955-4a26efb2c086}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_LOCATION" />
