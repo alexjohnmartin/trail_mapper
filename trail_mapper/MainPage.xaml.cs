@@ -37,11 +37,11 @@ namespace trail_mapper
             {
                 App.ViewModel.LoadData();
             }
-
-            UpdateRecordTrailButton();
             
             if (App.ViewModel.State == RecordingState.RecordingStarted)
                 NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
+
+            UpdateRecordTrailButton();
 
             if (e.NavigationMode == NavigationMode.New)
             {
@@ -163,12 +163,16 @@ namespace trail_mapper
         {
             _updating = true;
             if (App.Geolocator == null)
+            {
                 App.Geolocator = new Geolocator();
-
+                App.Geolocator.DesiredAccuracy = PositionAccuracy.High;
+                App.Geolocator.MovementThreshold = 10; // The units are meters.
+            }
             var locationEnabled = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") &&
                     (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"] &&
                     !App.Geolocator.LocationStatus.Equals(PositionStatus.NotAvailable) &&
-                    !App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled);
+                    !App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled) &&
+                    !App.ViewModel.State.Equals(RecordingState.RecordingStarted);
 
             NewTrailButton.IsEnabled = locationEnabled;
             AllowLocationCheckbox.IsChecked = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") && (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];

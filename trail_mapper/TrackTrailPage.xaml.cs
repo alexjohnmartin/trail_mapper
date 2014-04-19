@@ -24,11 +24,6 @@ namespace trail_mapper
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            if (App.Geolocator == null)
-                App.Geolocator = new Geolocator();
-            
-            App.Geolocator.DesiredAccuracy = PositionAccuracy.High;
-            App.Geolocator.MovementThreshold = 10; // The units are meters.
             UpdateButtons(); 
         }
 
