@@ -1,4 +1,6 @@
-Record your favorite trails, map your travels, measure your effort and track your training.
+Want to record your hike through the woods? Want to map your favorite biking trails? Want to measure and time your run?
+
+Trail Mapper lets you record your travels, show them on a map, gather statistics and share them with your friends. 
 
 
 Privacy policy
@@ -6,3 +8,13 @@ Privacy policy
 This application will search for your location to within 10 meters, it only does this when you are recording a trail.
 It stores your location data on your device, no other apps can access this data.
 It does NOT share it with anyone other than who you explicity choose to send it to.
+
+
+
+Keywords
+****************
+Biking
+Hiking
+map
+trail
+record
