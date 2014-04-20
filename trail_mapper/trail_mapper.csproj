@@ -145,6 +145,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AppStoreIcon.png" />
     <Content Include="Assets\About\appbar.companioncube.png" />
     <Content Include="Assets\About\appbar.email.png" />
     <Content Include="Assets\About\appbar.marketplace.png" />
@@ -154,9 +155,14 @@
     <Content Include="Assets\About\appbar.social.linkedin.png" />
     <Content Include="Assets\About\appbar.social.linkedin.variant.png" />
     <Content Include="Assets\About\appbar.social.twitter.png" />
+    <Content Include="Assets\Appbar\appbar.control.record-disabled.png" />
+    <Content Include="Assets\Appbar\appbar.control.record.png" />
+    <Content Include="Assets\Appbar\appbar.control.stop.png" />
     <Content Include="Assets\Appbar\appbar.database.png" />
+    <Content Include="Assets\Appbar\appbar.delete-small.png" />
     <Content Include="Assets\Appbar\appbar.delete.png" />
     <Content Include="Assets\Appbar\appbar.map.treasure.png" />
+    <Content Include="Assets\Appbar\appbar.save-small.png" />
     <Content Include="Assets\HoneycombBackground.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />

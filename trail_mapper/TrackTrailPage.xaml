@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -17,34 +18,66 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <!--<ColumnDefinition Width="20"/>-->
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,0,12,28">
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Margin="12,0,12,12">
             <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock Text="Record a trail" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-            
-            <Button Name="StartTrackingButton" Click="StartTrackingButton_Click">
-                <TextBlock Text="start tracking"/>
-            </Button>
-
-            <Button Name="StopTrackingButton" Click="StopTrackingButton_Click">
-                <TextBlock Text="stop tracking"/>
-            </Button>
-            
-            <TextBlock Text="trail name"/>
-            <TextBox Name="TrailNameTextbox"/>
-
-            <Button Name="SaveButton" Click="SaveButton_Click">
-                <TextBlock Text="save trail"/>
-            </Button>
         </StackPanel>
+        
+        <Button Name="StartTrackingButton" Click="StartTrackingButton_Click"
+                Grid.Row="1" Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Assets/Appbar/appbar.control.record.png" VerticalAlignment="Center"/>
+                <TextBlock Text="start" TextWrapping="Wrap" VerticalAlignment="Center" Margin="12,-6,8,0"/>
+            </StackPanel>
+        </Button>
 
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Button Name="StopTrackingButton" Click="StopTrackingButton_Click"
+                Grid.Row="1" Grid.Column="2">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Assets/Appbar/appbar.control.stop.png" VerticalAlignment="Center"/>
+                <TextBlock Text="stop" TextWrapping="Wrap" VerticalAlignment="Center" Margin="12,-6,8,0"/>
+            </StackPanel>
+        </Button>
+
+        <!--<StackPanel Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,0">-->
+            <TextBox Name="TrailNameTextbox" Text="New trail" InputScope="Text" Grid.Row="2" Grid.ColumnSpan="2"
+                     Foreground="Gray" GotFocus="WatermarkTB_GotFocus" LostFocus="WatermarkTB_LostFocus"/>
+
+        <Button Name="SaveButton" Click="SaveButton_Click" Grid.Row="3" Grid.Column="0" Margin="0,-10,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Assets/Appbar/appbar.save-small.png" VerticalAlignment="Center"/>
+                    <TextBlock Text="save" VerticalAlignment="Center" Margin="12,-6,8,0"/>
+                </StackPanel>
+            </Button>
+
+            <Button Name="DiscardButton" Click="DiscardButton_Click" Grid.Row="3" Grid.Column="1" Margin="0,-10,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Assets/Appbar/appbar.delete-small.png" VerticalAlignment="Center"/>
+                    <TextBlock Text="discard" VerticalAlignment="Center" Margin="12,-6,8,0"/>
+                </StackPanel>
+            </Button>
+        <!--</StackPanel>-->
+
+        <Grid x:Name="ContentPanel" Grid.Row="4" Grid.ColumnSpan="2" Margin="12,0,12,12">
             <StackPanel>
                 <TextBlock x:Name="LatitudeTextBlock" Text="latitude"/>
                 <TextBlock x:Name="LongitudeTextBlock" Text="longitude"/>
+                <!--<maps:Map x:Name="HereMap" 
+                      ZoomLevel="17" 
+                      Pitch="0" 
+                      CartographicMode="Hybrid"/>-->
             </StackPanel>
         </Grid>
     </Grid>

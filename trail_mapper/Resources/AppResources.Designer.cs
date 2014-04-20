@@ -169,6 +169,15 @@ namespace trail_mapper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New trail.
+        /// </summary>
+        public static string NewTrailTextboxWatermark {
+            get {
+                return ResourceManager.GetString("NewTrailTextboxWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to record a new trail.
         /// </summary>
         public static string RecordNewTrailButton {

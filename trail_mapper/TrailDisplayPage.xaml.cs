@@ -96,6 +96,10 @@ namespace trail_mapper
         {
             base.OnNavigatedTo(e);
 
+            //var lastStackItem = NavigationService.BackStack.FirstOrDefault();
+            //if (lastStackItem.Source.OriginalString.Contains("TrackTrailPage.xaml"))
+            //    NavigationService.RemoveBackEntry();
+
             var gc = new GeoCoordinateCollection();
             foreach (var item in App.ViewModel.SelectedTrail.History)
                 gc.Add(new GeoCoordinate(item.Latitude, item.Longitude, item.Altitude));

@@ -56,7 +56,7 @@ namespace trail_mapper.ViewModels
             get
             {
                 var distance = TotalDistance;
-                if (distance < 1000) return distance + "m";
+                if (distance < 1000) return distance.ToString("0.0") + "m";
                 return (distance / 1000).ToString("0.00") + "km";
             }
         }

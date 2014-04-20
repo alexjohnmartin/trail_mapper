@@ -177,4 +177,7 @@
   <data name="AppBarShareDataButtonText" xml:space="preserve">
     <value>Email map data</value>
   </data>
+  <data name="NewTrailTextboxWatermark" xml:space="preserve">
+    <value>New trail</value>
+  </data>
 </root>
