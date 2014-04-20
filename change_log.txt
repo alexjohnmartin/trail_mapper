@@ -1,4 +1,5 @@
 change log
 
 1.0.0.0 - initial app submission - basic trail recording and viewing, sharing a screenshot of the map - THIS FAILED CERTIFICATION (app crashed when location tracking disabled)
-1.0.1.0 - fixing bug when location is disabled in the phone settings
+1.0.1.0 - fixing bug when location is disabled in the phone settings - submission was cancelled, this version was buggy when recording
+1.0.2.0 - fixing recording bugs, basic usability and styling tweaks

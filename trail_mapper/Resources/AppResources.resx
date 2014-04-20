@@ -180,4 +180,10 @@
   <data name="NewTrailTextboxWatermark" xml:space="preserve">
     <value>New trail</value>
   </data>
+  <data name="DistanceLabel" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="TimeLabel" xml:space="preserve">
+    <value>Time</value>
+  </data>
 </root>

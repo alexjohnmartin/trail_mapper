@@ -70,15 +70,24 @@
             </Button>
         <!--</StackPanel>-->
 
-        <Grid x:Name="ContentPanel" Grid.Row="4" Grid.ColumnSpan="2" Margin="12,0,12,12">
-            <StackPanel>
-                <TextBlock x:Name="LatitudeTextBlock" Text="latitude"/>
-                <TextBlock x:Name="LongitudeTextBlock" Text="longitude"/>
-                <!--<maps:Map x:Name="HereMap" 
-                      ZoomLevel="17" 
-                      Pitch="0" 
-                      CartographicMode="Hybrid"/>-->
-            </StackPanel>
+
+
+        <Grid x:Name="ContentPanel" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=LocalizedResources.TimeLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="" Name="TimeTextBlock" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Path=LocalizedResources.DistanceLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="" Name="DistanceTextBlock" Style="{StaticResource PhoneTextNormalStyle}"/>
+
         </Grid>
     </Grid>
 

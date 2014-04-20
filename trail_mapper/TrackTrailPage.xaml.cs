@@ -87,19 +87,22 @@ namespace trail_mapper
         {
             if (args.Position.Coordinate.PositionSource == PositionSource.Satellite)
             {
+                if (App.ViewModel.State == RecordingState.RecordingStarted)
+                    App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude });
+
                 if (!App.RunningInBackground)
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
                         //update display
-                        LatitudeTextBlock.Text = args.Position.Coordinate.Latitude.ToString();
-                        LongitudeTextBlock.Text = args.Position.Coordinate.Longitude.ToString();
+                        //LatitudeTextBlock.Text = args.Position.Coordinate.Latitude.ToString();
+                        //LongitudeTextBlock.Text = args.Position.Coordinate.Longitude.ToString();
+                        var map = new TrailMap();
+                        map.History = App.ViewModel.TrailHistory;
+                        TimeTextBlock.Text = map.FormattedTotalTime;
+                        DistanceTextBlock.Text = map.FormattedTotalDistance;
                     });
                 }
-
-                if (App.ViewModel.State == RecordingState.RecordingStarted)
-                    App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude });
-
                 //_hasAnyDataChanged = true;
             }
         }
@@ -116,8 +119,10 @@ namespace trail_mapper
             Geoposition position = await locator.GetGeopositionAsync();
             if (position.Coordinate.PositionSource == PositionSource.Satellite)
             {
-                LatitudeTextBlock.Text = position.Coordinate.Latitude.ToString();
-                LongitudeTextBlock.Text = position.Coordinate.Longitude.ToString();
+                //LatitudeTextBlock.Text = position.Coordinate.Latitude.ToString();
+                //LongitudeTextBlock.Text = position.Coordinate.Longitude.ToString();
+                TimeTextBlock.Text = "0:00:00";
+                DistanceTextBlock.Text = "0m";
                 App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude });
                 //_hasAnyDataChanged = true;
             }

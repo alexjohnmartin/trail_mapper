@@ -142,6 +142,15 @@ namespace trail_mapper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distance.
+        /// </summary>
+        public static string DistanceLabel {
+            get {
+                return ResourceManager.GetString("DistanceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Distance: {0}, time: {1}.
         /// </summary>
         public static string LocationDescription {
@@ -210,6 +219,15 @@ namespace trail_mapper.Resources {
         public static string SettingsAllowLocation {
             get {
                 return ResourceManager.GetString("SettingsAllowLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        public static string TimeLabel {
+            get {
+                return ResourceManager.GetString("TimeLabel", resourceCulture);
             }
         }
         
