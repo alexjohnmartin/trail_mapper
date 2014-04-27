@@ -186,4 +186,13 @@
   <data name="TimeLabel" xml:space="preserve">
     <value>Time</value>
   </data>
+  <data name="SettingsAutoStopMaxTime" xml:space="preserve">
+    <value>Auto stop recording after...</value>
+  </data>
+  <data name="SettingsMovementThreshold" xml:space="preserve">
+    <value>How far you move before the map plots a new point</value>
+  </data>
+  <data name="SettingsAccuracy" xml:space="preserve">
+    <value>Location accuracy</value>
+  </data>
 </root>

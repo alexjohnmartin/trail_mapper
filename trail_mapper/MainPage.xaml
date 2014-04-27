@@ -61,33 +61,66 @@
             </phone:PanoramaItem>
             
             <phone:PanoramaItem Header="Settings">
-                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,-24,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="80" />
-                        <RowDefinition Height="80" />
-                        <RowDefinition Height="80" />
-                        <RowDefinition Height="80" />
-                        <RowDefinition Height="80" />
-                        <RowDefinition Height="80" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="55" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAllowLocation, Source={StaticResource LocalizedStrings}}" 
+                <StackPanel x:Name="ContentPanel" Margin="0,-24,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="55" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Path=LocalizedResources.SettingsAllowLocation, Source={StaticResource LocalizedStrings}}" 
+                            Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="12,0,0,0"/>
+                        <CheckBox Name="AllowLocationCheckbox"
+                                    Checked="AllowLocationCheckbox_Checked"
+                                    Unchecked="AllowLocationCheckbox_Unchecked"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="0,-8,0,-10"
+                                    VerticalAlignment="Top"/>
+                    </Grid>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAutoStopMaxTime, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
-                       Grid.Row="0"
-                       Grid.Column="0"
-                       Margin="12,0,0,0"/>
-                    <CheckBox Name="AllowLocationCheckbox"
-                              Checked="AllowLocationCheckbox_Checked"
-                              Unchecked="AllowLocationCheckbox_Unchecked"
-                              Grid.Row="0"
-                              Grid.Column="1"
-                              Margin="0,-18,0,0"
-                              VerticalAlignment="Top"/>
-                </Grid>
+                       Margin="12,28,0,0"/>
+                    <toolkit:ListPicker
+                        Name="AutoStopMaxTimeList"
+                        Margin="12,0,12,0"
+                        SelectedIndex="2"
+                        SelectionChanged="AutoStopMaxTimeList_SelectionChanged">
+                        <toolkit:ListPickerItem Tag="1">1 minute</toolkit:ListPickerItem>
+                        <toolkit:ListPickerItem Tag="30">30 minutes</toolkit:ListPickerItem>
+                        <toolkit:ListPickerItem Tag="60">1 hour</toolkit:ListPickerItem>
+                        <toolkit:ListPickerItem Tag="120">2 hours</toolkit:ListPickerItem>
+                        <!--<toolkit:ListPickerItem Tag="180">3 hours</toolkit:ListPickerItem>
+                        <toolkit:ListPickerItem Tag="240">4 hours</toolkit:ListPickerItem>-->
+                    </toolkit:ListPicker>
+
+                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAccuracy, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
+                       Margin="12,28,0,0"/>
+                    <toolkit:ListPicker
+                        Name="AccuracyList"
+                        Margin="12,0,12,0"
+                        SelectedIndex="0"
+                        SelectionChanged="AccuracyList_SelectionChanged">
+                        <toolkit:ListPickerItem Tag="Low">Low (better battery life)</toolkit:ListPickerItem>
+                        <toolkit:ListPickerItem Tag="High">High (better map results)</toolkit:ListPickerItem>
+                    </toolkit:ListPicker>
+
+                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsMovementThreshold, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
+                       Margin="12,28,0,0"/>
+                    <toolkit:ListPicker
+                        Name="MovementThresholdList"
+                        Margin="12,0,12,0"
+                        SelectedIndex="1"
+                        SelectionChanged="MovementThresholdList_SelectionChanged">
+                        <toolkit:ListPickerItem Tag="10">10 meters</toolkit:ListPickerItem>
+                        <toolkit:ListPickerItem Tag="25">25 meters</toolkit:ListPickerItem>
+                        <toolkit:ListPickerItem Tag="50">50 meters</toolkit:ListPickerItem>
+                    </toolkit:ListPicker>
+                </StackPanel>
             </phone:PanoramaItem>
 
             <phone:PanoramaItem Header="{Binding Path=LocalizedResources.AboutHeader, Source={StaticResource LocalizedStrings}}">

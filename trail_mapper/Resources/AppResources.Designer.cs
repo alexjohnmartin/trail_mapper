@@ -214,11 +214,38 @@ namespace trail_mapper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location accuracy.
+        /// </summary>
+        public static string SettingsAccuracy {
+            get {
+                return ResourceManager.GetString("SettingsAccuracy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can this application use your location?.
         /// </summary>
         public static string SettingsAllowLocation {
             get {
                 return ResourceManager.GetString("SettingsAllowLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto stop recording after....
+        /// </summary>
+        public static string SettingsAutoStopMaxTime {
+            get {
+                return ResourceManager.GetString("SettingsAutoStopMaxTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How far you move before the map plots a new point.
+        /// </summary>
+        public static string SettingsMovementThreshold {
+            get {
+                return ResourceManager.GetString("SettingsMovementThreshold", resourceCulture);
             }
         }
         

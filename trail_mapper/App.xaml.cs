@@ -10,15 +10,40 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using trail_mapper.Resources;
 using trail_mapper.ViewModels;
-using Windows.Devices.Geolocation; 
+using Windows.Devices.Geolocation;
+using System.IO.IsolatedStorage; 
 
 namespace trail_mapper
 {
     public partial class App : Application
     {
-        public static Geolocator Geolocator { get; set; }
-        public static bool RunningInBackground { get; set; }
+        public static double DefaultMovementThreshold = 10d;
+        public static int DefaultAutoStopInMins = 120;
+        public static string DefaultAccuracy = "High";
 
+        private static Geolocator _geolocator;
+        public static Geolocator Geolocator
+        {
+            get
+            {
+                if (_geolocator == null)
+                {
+                    App.Breadcrumb = "loading geolocator";
+                    _geolocator = new Geolocator();
+                    _geolocator.DesiredAccuracy = IsolatedStorageSettings.ApplicationSettings.Contains("TrackingAccuracy") ?
+                        IsolatedStorageSettings.ApplicationSettings["TrackingAccuracy"].ToString() == "High" ? PositionAccuracy.High : PositionAccuracy.Default : PositionAccuracy.Default;
+                    _geolocator.MovementThreshold = IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold") ?
+                        double.Parse(IsolatedStorageSettings.ApplicationSettings["MovementThreshold"].ToString()) : DefaultMovementThreshold;
+                }
+                return _geolocator;
+            }
+            set
+            {
+                _geolocator = value;
+            }
+        }
+
+        public static bool RunningInBackground { get; set; }
         private void Application_RunningInBackground(object sender, RunningInBackgroundEventArgs args)
         {
             RunningInBackground = true;
@@ -85,7 +110,6 @@ namespace trail_mapper
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
         }
 
         // Code to execute when the application is launching (eg, from Start)
@@ -131,8 +155,12 @@ namespace trail_mapper
         }
 
         // Code to execute on Unhandled Exceptions
+        public static string Breadcrumb { get; set; }
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
+            var stackTrace = e.ExceptionObject.StackTrace;
+            MessageBox.Show(e.ExceptionObject.Message + Environment.NewLine + Breadcrumb + Environment.NewLine + "Sender: " + sender.ToString(), "Unhandled exception", MessageBoxButton.OK);
+            if (!string.IsNullOrEmpty(stackTrace)) Clipboard.SetText(stackTrace);
             if (Debugger.IsAttached)
             {
                 // An unhandled exception has occurred; break into the debugger

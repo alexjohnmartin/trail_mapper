@@ -25,53 +25,21 @@ namespace trail_mapper
     public partial class TrackTrailPage : PhoneApplicationPage
     {
         private string _newTrailText = "New trail";
-        //private bool _hasAnyDataChanged = false;
-        //private Timer _timer; 
+        private int _autoStopAfterMins = 120;
+        private DateTime _recordingStartTime = DateTime.MinValue;
+        private Timer _timer; 
 
         public TrackTrailPage()
         {
             InitializeComponent();
-            App.Geolocator.PositionChanged += geolocator_PositionChanged;
             _newTrailText = trail_mapper.Resources.AppResources.NewTrailTextboxWatermark; 
         }
 
-        //private void Timer_Tick(object state)
-        //{
-        //    if (App.RunningInBackground)
-        //    {
-        //        _timer = null;
-        //        return;
-        //    }
-
-        //    if (!_hasAnyDataChanged) return;
-        //    if (App.ViewModel.TrailHistory.Count < 1) return;
-
-        //    //LatitudeTextBlock.Text = App.ViewModel.TrailHistory.Last().Latitude.ToString();
-        //    //LongitudeTextBlock.Text = App.ViewModel.TrailHistory.Last().Longitude.ToString();
-
-        //    var gc = new GeoCoordinateCollection();
-        //    foreach (var item in App.ViewModel.TrailHistory)
-        //        gc.Add(new GeoCoordinate(item.Latitude, item.Longitude, item.Altitude));
-
-        //    var dynamicPolyline = new MapPolyline();
-        //    dynamicPolyline.StrokeDashed = false;
-        //    dynamicPolyline.StrokeThickness = 5;
-        //    dynamicPolyline.StrokeColor = Colors.Red;
-        //    dynamicPolyline.Path = gc;
-
-        //    HereMap.MapElements.Add(dynamicPolyline);
-
-        //    var array = App.ViewModel.TrailHistory.Select(i => new GeoCoordinate(i.Latitude, i.Longitude)).ToArray();
-        //    var boundingRectangle = LocationRectangle.CreateBoundingRectangle(array);
-        //    HereMap.SetView(boundingRectangle);
-
-        //    _hasAnyDataChanged = false;
-        //}
-
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            //_timer = new Timer(Timer_Tick, null, 100, 5000);
-            UpdateButtons(); 
+            UpdateButtons();
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("AutoStopAfterMins"))
+                _autoStopAfterMins = (int)IsolatedStorageSettings.ApplicationSettings["AutoStopAfterMins"];
         }
 
         protected override void OnRemovedFromJournal(System.Windows.Navigation.JournalEntryRemovedEventArgs e)
@@ -79,67 +47,63 @@ namespace trail_mapper
             if (App.Geolocator != null)
             {
                 App.Geolocator.PositionChanged -= geolocator_PositionChanged;
-                App.Geolocator = null;
+                //App.Geolocator = null;
             }
         }
 
         private void geolocator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
-            if (args.Position.Coordinate.PositionSource == PositionSource.Satellite)
+            if (App.ViewModel.State == RecordingState.RecordingStarted)
             {
-                if (App.ViewModel.State == RecordingState.RecordingStarted)
-                    App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude });
-
-                if (!App.RunningInBackground)
+                if (args.Position.Coordinate.PositionSource == PositionSource.Satellite)
                 {
-                    Dispatcher.BeginInvoke(() =>
+                    if (App.ViewModel.State == RecordingState.RecordingStarted)
+                        App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.UtcNow, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude });
+
+                    if (!App.RunningInBackground)
                     {
-                        //update display
-                        //LatitudeTextBlock.Text = args.Position.Coordinate.Latitude.ToString();
-                        //LongitudeTextBlock.Text = args.Position.Coordinate.Longitude.ToString();
-                        var map = new TrailMap();
-                        map.History = App.ViewModel.TrailHistory;
-                        TimeTextBlock.Text = map.FormattedTotalTime;
-                        DistanceTextBlock.Text = map.FormattedTotalDistance;
-                    });
+                        Dispatcher.BeginInvoke(() =>
+                        {
+                            //update display
+                            //LatitudeTextBlock.Text = args.Position.Coordinate.Latitude.ToString();
+                            //LongitudeTextBlock.Text = args.Position.Coordinate.Longitude.ToString();
+                            var map = new TrailMap();
+                            map.History = App.ViewModel.TrailHistory;
+                            TimeTextBlock.Text = map.FormattedTotalTime;
+                            DistanceTextBlock.Text = map.FormattedTotalDistance;
+                        });
+                    }
                 }
-                //_hasAnyDataChanged = true;
+
+                //if (DateTime.UtcNow > _recordingStartTime.AddMinutes(_autoStopAfterMins))
+                //    StopTracking();
             }
         }
 
         private async void StartTrackingButton_Click(object sender, RoutedEventArgs e)
         {
+            App.ViewModel.TrailHistory = new List<HistoryItem>();
             App.ViewModel.State = RecordingState.RecordingStarted;
             UpdateButtons();
+            UpdateStatistics();
 
-            App.ViewModel.TrailHistory = new List<HistoryItem>();
-            //App.Geolocator.PositionChanged += geolocator_PositionChanged;
+            _recordingStartTime = DateTime.UtcNow;
+            _timer = new Timer(Timer_tick, null, 100, 1000);
+            App.Geolocator.PositionChanged += geolocator_PositionChanged;
 
-            var locator = new Geolocator();
-            Geoposition position = await locator.GetGeopositionAsync();
+            Geoposition position = await App.Geolocator.GetGeopositionAsync();
             if (position.Coordinate.PositionSource == PositionSource.Satellite)
             {
                 //LatitudeTextBlock.Text = position.Coordinate.Latitude.ToString();
                 //LongitudeTextBlock.Text = position.Coordinate.Longitude.ToString();
-                TimeTextBlock.Text = "0:00:00";
-                DistanceTextBlock.Text = "0m";
-                App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.Now, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude });
-                //_hasAnyDataChanged = true;
+                App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.UtcNow, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude });
             }
-            //HereMap.Center = new GeoCoordinate(position.Coordinate.Latitude, position.Coordinate.Longitude);
         }
 
         private void StopTrackingButton_Click(object sender, RoutedEventArgs e)
         {
-            if (App.ViewModel.TrailHistory.Count > 0)
-                App.ViewModel.State = RecordingState.RecordingFinished;
-            else
-                App.ViewModel.State = RecordingState.New;
-
+            StopTracking();
             UpdateButtons();
-
-            //App.Geolocator.PositionChanged -= geolocator_PositionChanged;
-            //App.Geolocator = null;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -149,20 +113,16 @@ namespace trail_mapper
             var json = JsonConvert.SerializeObject(trailMap);
 
             using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
+            using (var stream = iso.CreateFile(trailMap.Id.ToString() + ".json"))
+            using (StreamWriter writer = new StreamWriter(stream))
             {
-                using (var stream = iso.CreateFile(trailMap.Id.ToString() + ".json"))
-                {
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        writer.WriteLine(json);
-                        writer.Flush();
-                        writer.Close();
-                    }
-                }
+                writer.WriteLine(json);
+                writer.Flush();
+                writer.Close();
             }
 
             App.ViewModel.AddTrailHistory(trailMap);
-            App.ViewModel.State = RecordingState.Saved;
+            App.ViewModel.State = RecordingState.New;
             App.ViewModel.SelectedTrail = trailMap;
             NavigationService.Navigate(new Uri("/TrailDisplayPage.xaml", UriKind.Relative));
         }
@@ -189,6 +149,29 @@ namespace trail_mapper
             }
         }
 
+        private void DiscardButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to discard this recording? Nothing will be saved, this cannot be undone.", "Discard recording", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                App.ViewModel.TrailHistory = new List<HistoryItem>();
+                App.ViewModel.State = RecordingState.New;
+                UpdateStatistics();
+                UpdateButtons();
+            }
+        }
+
+        private void Timer_tick(object state)
+        {
+            if (!App.RunningInBackground)
+            {
+                UpdateButtons();
+                UpdateStatistics();
+            }
+
+            if (DateTime.UtcNow > _recordingStartTime.AddMinutes(_autoStopAfterMins))
+                StopTracking();
+        }
+
         private void UpdateButtons()
         {
             StartTrackingButton.IsEnabled = App.ViewModel.State == RecordingState.New;
@@ -199,14 +182,25 @@ namespace trail_mapper
             if (App.ViewModel.State == RecordingState.New) TrailNameTextbox.Text = _newTrailText;
         }
 
-        private void DiscardButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateStatistics()
         {
-            if (MessageBox.Show("Are you sure you want to discard this recording? Nothing will be saved, this cannot be undone.", "Discard recording", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            {
-                App.ViewModel.TrailHistory = new List<HistoryItem>();
+            var map = new TrailMap();
+            var now = DateTime.UtcNow;
+            map.History = App.ViewModel.TrailHistory;
+            TimeTextBlock.Text = map.FormattedTotalTime; //now.Subtract(_recordingStartTime).ToString(@"h\:mm\:ss");
+            DistanceTextBlock.Text = map.FormattedTotalDistance;
+        }
+
+        private void StopTracking()
+        {
+            App.Geolocator.PositionChanged -= geolocator_PositionChanged;
+            App.Geolocator = null;
+            _timer = null;
+
+            if (App.ViewModel.TrailHistory.Count > 1)
+                App.ViewModel.State = RecordingState.RecordingFinished;
+            else
                 App.ViewModel.State = RecordingState.New;
-                UpdateButtons();
-            }
         }
     }
 }

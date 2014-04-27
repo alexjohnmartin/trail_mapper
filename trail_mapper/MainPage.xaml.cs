@@ -33,21 +33,30 @@ namespace trail_mapper
         // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            App.Breadcrumb = "loading data";
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();
+                App.ViewModel.State = RecordingState.New;
             }
-            
+
+            App.Breadcrumb = "seeing if we need to navigate to tracking page";
             if (App.ViewModel.State == RecordingState.RecordingStarted)
                 NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
 
-            UpdateRecordTrailButton();
+            Deployment.Current.Dispatcher.BeginInvoke(delegate
+                {
+                    UpdateButtons();
+                });
 
             if (e.NavigationMode == NavigationMode.New)
             {
+                App.Breadcrumb = "checking location is enabled";
                 if (App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled))
                     MessageBox.Show("Location services are disabled on your device, you will not be able to record new trails until you enable this in your device's settings", "Location disabled", MessageBoxButton.OK);
+                //App.Geolocator = null;
 
+                App.Breadcrumb = "checking location consent";
                 if (!IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent"))
                     PromptIfWeCanUseUsersLocation();
             }
@@ -55,12 +64,14 @@ namespace trail_mapper
 
         private void NewTrailButton_Click(object sender, RoutedEventArgs e)
         {
+            App.Breadcrumb = "new trail button click";
             App.ViewModel.State = RecordingState.New; 
             NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
         }
 
         private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            App.Breadcrumb = "trail tapped";
             var trailMap = (TrailMap)((StackPanel)sender).Tag;
             //trailMap.CleanUpData();
             App.ViewModel.SelectedTrail = trailMap; 
@@ -69,6 +80,7 @@ namespace trail_mapper
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
+            App.Breadcrumb = "delete selected";
             var menuItem = (MenuItem)sender;
             var trailMap = (TrailMap)menuItem.Tag;
             if (MessageBox.Show("Are you sure you want to delete this map?", "Delete " + trailMap.Name, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
@@ -83,6 +95,7 @@ namespace trail_mapper
 
         private void ShareData_Click(object sender, EventArgs e)
         {
+            App.Breadcrumb = "share data selected";
             var item = (MenuItem)sender;
             var map = (TrailMap)item.Tag;
             var emailTask = new EmailComposeTask();
@@ -127,8 +140,12 @@ namespace trail_mapper
         {
             if (!_updating)
             {
-                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
-                UpdateRecordTrailButton();
+                Deployment.Current.Dispatcher.BeginInvoke(delegate
+                {
+                    App.Breadcrumb = "allow location changed";
+                    IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
+                    UpdateButtons();
+                });
             }
         }
 
@@ -136,47 +153,125 @@ namespace trail_mapper
         {
             if (!_updating)
             {
-                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
-                UpdateRecordTrailButton();
+                Deployment.Current.Dispatcher.BeginInvoke(delegate
+                {
+                    App.Breadcrumb = "allow location changed";
+                    IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
+                    UpdateButtons();
+                });
             }
         }
 
         private void PromptIfWeCanUseUsersLocation()
         {
+            App.Breadcrumb = "prompting if we can use user's location";
             //If they didn't we ask for it
             MessageBoxResult result = MessageBox.Show(trail_mapper.Resources.AppResources.LocationPrivacyPolicyBody, trail_mapper.Resources.AppResources.LocationPrivacyPolicyTitle, MessageBoxButton.OKCancel);
             if (result == MessageBoxResult.OK)
-            {
-                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
-            }
+                IsolatedStorageSettings.ApplicationSettings.Add("LocationConsent", true);
             else
-            {
-                IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
-            }
+                IsolatedStorageSettings.ApplicationSettings.Add("LocationConsent", false);
 
-            UpdateRecordTrailButton();
             IsolatedStorageSettings.ApplicationSettings.Save();
+
+            UpdateButtons();
         }
 
-        private bool _updating = false;
-        private void UpdateRecordTrailButton()
+        private bool _updating = true;
+        private void UpdateButtons()
         {
+            App.Breadcrumb = "updating buttons on main page";
             _updating = true;
-            if (App.Geolocator == null)
+            var button = "new trail button";
+            try
             {
-                App.Geolocator = new Geolocator();
-                App.Geolocator.DesiredAccuracy = PositionAccuracy.High;
-                App.Geolocator.MovementThreshold = 10; // The units are meters.
-            }
-            var locationEnabled = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") &&
-                    (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"] &&
-                    !App.Geolocator.LocationStatus.Equals(PositionStatus.NotAvailable) &&
-                    !App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled) &&
-                    !App.ViewModel.State.Equals(RecordingState.RecordingStarted);
+                var locationEnabled = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") &&
+                        bool.Parse(IsolatedStorageSettings.ApplicationSettings["LocationConsent"].ToString()) &&
+                        !App.Geolocator.LocationStatus.Equals(PositionStatus.NotAvailable) &&
+                        !App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled) &&
+                        !App.ViewModel.State.Equals(RecordingState.RecordingStarted);
 
-            NewTrailButton.IsEnabled = locationEnabled;
-            AllowLocationCheckbox.IsChecked = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") && (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
+                NewTrailButton.IsEnabled = locationEnabled;
+                AllowLocationCheckbox.IsChecked = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") && (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
+
+                button = "movement threshold list";
+                if (!IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold")) IsolatedStorageSettings.ApplicationSettings.Add("MovementThreshold", App.DefaultMovementThreshold);
+                var threshold = int.Parse(IsolatedStorageSettings.ApplicationSettings["MovementThreshold"].ToString());
+                var item = MovementThresholdList.Items.FirstOrDefault(i => int.Parse(((ListPickerItem)i).Tag.ToString()) == threshold);
+                var index = MovementThresholdList.Items.IndexOf(item);
+                MovementThresholdList.SelectedIndex = index;
+
+                button = "auto-stop list";
+                if (!IsolatedStorageSettings.ApplicationSettings.Contains("AutoStopAfterMins")) IsolatedStorageSettings.ApplicationSettings.Add("AutoStopAfterMins", App.DefaultAutoStopInMins);
+                var autoStopMins = int.Parse(IsolatedStorageSettings.ApplicationSettings["AutoStopAfterMins"].ToString());
+                item = AutoStopMaxTimeList.Items.FirstOrDefault(i => int.Parse(((ListPickerItem)i).Tag.ToString()) == autoStopMins);
+                index = AutoStopMaxTimeList.Items.IndexOf(item);
+                AutoStopMaxTimeList.SelectedIndex = index;
+
+                button = "accuracy list";
+                if (!IsolatedStorageSettings.ApplicationSettings.Contains("TrackingAccuracy")) IsolatedStorageSettings.ApplicationSettings.Add("TrackingAccuracy", App.DefaultAccuracy);
+                var accuracy = IsolatedStorageSettings.ApplicationSettings["TrackingAccuracy"].ToString();
+                item = AccuracyList.Items.FirstOrDefault(i => ((ListPickerItem)i).Tag.ToString() == accuracy);
+                index = AccuracyList.Items.IndexOf(item);
+                AccuracyList.SelectedIndex = index;
+
+                IsolatedStorageSettings.ApplicationSettings.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error updating " + button, MessageBoxButton.OK);
+            }
+            //App.Geolocator = null;            
             _updating = false;
+        }
+
+        private void AutoStopMaxTimeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_updating)
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(delegate
+                {
+                    App.Breadcrumb = "auto-stop changed";
+                    var item = (ListPickerItem)((ListPicker)sender).SelectedItem;
+                    if (item == null) return;
+                    IsolatedStorageSettings.ApplicationSettings["AutoStopAfterMins"] = int.Parse(item.Tag.ToString());
+                    IsolatedStorageSettings.ApplicationSettings.Save();
+                });
+            }
+        }
+
+        private void MovementThresholdList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_updating)
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(delegate
+                {
+                    App.Breadcrumb = "threshold changed";
+                    var item = (ListPickerItem)((ListPicker)sender).SelectedItem;
+                    if (item == null) return;
+                    var accuracy = double.Parse(item.Tag.ToString());
+                    App.Geolocator.MovementThreshold = accuracy;
+                    IsolatedStorageSettings.ApplicationSettings["MovementThreshold"] = accuracy;
+                    IsolatedStorageSettings.ApplicationSettings.Save();
+                });
+            }
+        }
+
+        private void AccuracyList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_updating)
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(delegate
+                {
+                    App.Breadcrumb = "accuracy changed";
+                    var item = (ListPickerItem)((ListPicker)sender).SelectedItem;
+                    if (item == null) return;
+                    var accuracy = item.Tag.ToString();
+                    App.Geolocator.DesiredAccuracy = accuracy == "High" ? PositionAccuracy.High : PositionAccuracy.Default;
+                    IsolatedStorageSettings.ApplicationSettings["TrackingAccuracy"] = accuracy;
+                    IsolatedStorageSettings.ApplicationSettings.Save();
+                });
+            }
         }
     }
 }
