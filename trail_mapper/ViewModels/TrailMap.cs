@@ -16,17 +16,31 @@ namespace trail_mapper.ViewModels
             Id = Guid.NewGuid();
         }
 
+        [Newtonsoft.Json.JsonIgnore]
+        public string RecordedDate
+        {
+            get
+            {
+                if (History == null || History.Count < 2)
+                    return string.Empty;
+
+                return "Recorded: " + History.First().Time.ToShortDateString(); //TODO:localize
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
         public TimeSpan TotalTime
         {
             get
             {
-                if (History.Count < 2)
+                if (History == null || History.Count < 2)
                     return new TimeSpan();
 
                 return History.Last().Time.Subtract(History.First().Time); 
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public string FormattedTotalTime
         { 
             get
@@ -35,12 +49,13 @@ namespace trail_mapper.ViewModels
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public double TotalDistance
         {
             get
             {
                 double total = 0;
-                if (History.Count < 2)
+                if (History == null || History.Count < 2)
                     return total;
 
                 for (int i = 1; i < History.Count; i++)
@@ -51,6 +66,7 @@ namespace trail_mapper.ViewModels
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public string FormattedTotalDistance
         {
             get
@@ -71,11 +87,12 @@ namespace trail_mapper.ViewModels
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public GeoCoordinate Centre
         {
             get
             {
-                if (History.Count == 0)
+                if (History == null || History.Count == 0)
                     return new GeoCoordinate();
 
                 if (History.Count == 1)

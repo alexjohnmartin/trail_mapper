@@ -44,10 +44,10 @@ namespace trail_mapper
             if (App.ViewModel.State == RecordingState.RecordingStarted)
                 NavigationService.Navigate(new Uri("/TrackTrailPage.xaml", UriKind.Relative));
 
-            Deployment.Current.Dispatcher.BeginInvoke(delegate
-                {
-                    UpdateButtons();
-                });
+            //Deployment.Current.Dispatcher.BeginInvoke(delegate
+            //    {
+            //        UpdateButtons();
+            //    });
 
             if (e.NavigationMode == NavigationMode.New)
             {
@@ -60,6 +60,8 @@ namespace trail_mapper
                 if (!IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent"))
                     PromptIfWeCanUseUsersLocation();
             }
+
+            Dispatcher.BeginInvoke(() => UpdateButtons());
         }
 
         private void NewTrailButton_Click(object sender, RoutedEventArgs e)
@@ -91,6 +93,15 @@ namespace trail_mapper
                 //remove from view model
                 App.ViewModel.RemoveTrailMap(trailMap); 
             }
+        }
+
+        private readonly UploadHelper _uploadHelper = new UploadHelper();
+        private void Upload_Click(object sender, RoutedEventArgs e)
+        {
+            App.Breadcrumb = "upload selected";
+            var menuItem = (MenuItem)sender;
+            var trailMap = (TrailMap)menuItem.Tag;
+            _uploadHelper.UploadTrailMap(trailMap);
         }
 
         private void ShareData_Click(object sender, EventArgs e)
@@ -192,7 +203,7 @@ namespace trail_mapper
                         !App.ViewModel.State.Equals(RecordingState.RecordingStarted);
 
                 NewTrailButton.IsEnabled = locationEnabled;
-                AllowLocationCheckbox.IsChecked = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") && (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
+                AllowLocationToggle.IsChecked = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") && (bool)IsolatedStorageSettings.ApplicationSettings["LocationConsent"];
 
                 button = "movement threshold list";
                 if (!IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold")) IsolatedStorageSettings.ApplicationSettings.Add("MovementThreshold", App.DefaultMovementThreshold);
@@ -201,19 +212,19 @@ namespace trail_mapper
                 var index = MovementThresholdList.Items.IndexOf(item);
                 MovementThresholdList.SelectedIndex = index;
 
-                button = "auto-stop list";
-                if (!IsolatedStorageSettings.ApplicationSettings.Contains("AutoStopAfterMins")) IsolatedStorageSettings.ApplicationSettings.Add("AutoStopAfterMins", App.DefaultAutoStopInMins);
-                var autoStopMins = int.Parse(IsolatedStorageSettings.ApplicationSettings["AutoStopAfterMins"].ToString());
-                item = AutoStopMaxTimeList.Items.FirstOrDefault(i => int.Parse(((ListPickerItem)i).Tag.ToString()) == autoStopMins);
-                index = AutoStopMaxTimeList.Items.IndexOf(item);
-                AutoStopMaxTimeList.SelectedIndex = index;
+                //button = "auto-stop list";
+                //if (!IsolatedStorageSettings.ApplicationSettings.Contains("AutoStopAfterMins")) IsolatedStorageSettings.ApplicationSettings.Add("AutoStopAfterMins", App.DefaultAutoStopInMins);
+                //var autoStopMins = int.Parse(IsolatedStorageSettings.ApplicationSettings["AutoStopAfterMins"].ToString());
+                //item = AutoStopMaxTimeList.Items.FirstOrDefault(i => int.Parse(((ListPickerItem)i).Tag.ToString()) == autoStopMins);
+                //index = AutoStopMaxTimeList.Items.IndexOf(item);
+                //AutoStopMaxTimeList.SelectedIndex = index;
 
-                button = "accuracy list";
-                if (!IsolatedStorageSettings.ApplicationSettings.Contains("TrackingAccuracy")) IsolatedStorageSettings.ApplicationSettings.Add("TrackingAccuracy", App.DefaultAccuracy);
-                var accuracy = IsolatedStorageSettings.ApplicationSettings["TrackingAccuracy"].ToString();
-                item = AccuracyList.Items.FirstOrDefault(i => ((ListPickerItem)i).Tag.ToString() == accuracy);
-                index = AccuracyList.Items.IndexOf(item);
-                AccuracyList.SelectedIndex = index;
+                //button = "accuracy list";
+                //if (!IsolatedStorageSettings.ApplicationSettings.Contains("TrackingAccuracy")) IsolatedStorageSettings.ApplicationSettings.Add("TrackingAccuracy", App.DefaultAccuracy);
+                //var accuracy = IsolatedStorageSettings.ApplicationSettings["TrackingAccuracy"].ToString();
+                //item = AccuracyList.Items.FirstOrDefault(i => ((ListPickerItem)i).Tag.ToString() == accuracy);
+                //index = AccuracyList.Items.IndexOf(item);
+                //AccuracyList.SelectedIndex = index;
 
                 IsolatedStorageSettings.ApplicationSettings.Save();
             }
@@ -221,7 +232,7 @@ namespace trail_mapper
             {
                 MessageBox.Show(ex.Message, "Error updating " + button, MessageBoxButton.OK);
             }
-            //App.Geolocator = null;            
+            
             _updating = false;
         }
 

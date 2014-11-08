@@ -33,15 +33,20 @@ namespace trail_mapper
         {
             ApplicationBar = new ApplicationBar();
 
-            var shareDataButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.map.treasure.png", UriKind.Relative));
-            shareDataButton.Text = trail_mapper.Resources.AppResources.AppBarShareDataButtonText;
-            shareDataButton.Click += ShareData_Click;
-            ApplicationBar.Buttons.Add(shareDataButton);
+            //var shareDataButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.map.treasure.png", UriKind.Relative));
+            //shareDataButton.Text = trail_mapper.Resources.AppResources.AppBarShareDataButtonText;
+            //shareDataButton.Click += ShareData_Click;
+            //ApplicationBar.Buttons.Add(shareDataButton);
 
             var DeleteButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.delete.png", UriKind.Relative));
             DeleteButton.Text = trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
             DeleteButton.Click += Delete_Click;
             ApplicationBar.Buttons.Add(DeleteButton);
+
+            var UploadButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.database.png", UriKind.Relative));
+            UploadButton.Text = "upload"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
+            UploadButton.Click += Upload_Click;
+            ApplicationBar.Buttons.Add(UploadButton);
         }
 
         private void Delete_Click(object sender, EventArgs e)
@@ -59,16 +64,23 @@ namespace trail_mapper
             }
         }
 
-        private void ShareData_Click(object sender, EventArgs e)
+        private readonly UploadHelper _uploadHelper = new UploadHelper();
+        private void Upload_Click(object sender, EventArgs e)
         {
-            var filePath = SaveMapImageToMediaLibrary();
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                ShareMediaTask shareTask = new ShareMediaTask();
-                shareTask.FilePath = filePath;
-                shareTask.Show();
-            }
+            var trailMap = App.ViewModel.SelectedTrail;
+            _uploadHelper.UploadTrailMap(trailMap);
         }
+
+        //private void ShareData_Click(object sender, EventArgs e)
+        //{
+        //    var filePath = SaveMapImageToMediaLibrary();
+        //    if (!string.IsNullOrEmpty(filePath))
+        //    {
+        //        ShareMediaTask shareTask = new ShareMediaTask();
+        //        shareTask.FilePath = filePath;
+        //        shareTask.Show();
+        //    }
+        //}
 
         private string SaveMapImageToMediaLibrary()
         {

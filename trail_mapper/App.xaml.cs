@@ -17,9 +17,9 @@ namespace trail_mapper
 {
     public partial class App : Application
     {
-        public static double DefaultMovementThreshold = 10d;
-        public static int DefaultAutoStopInMins = 120;
-        public static string DefaultAccuracy = "High";
+        public static double DefaultMovementThreshold = 25d;
+        //public static int DefaultAutoStopInMins = 120;
+        //public static string DefaultAccuracy = "High";
 
         private static Geolocator _geolocator;
         public static Geolocator Geolocator
@@ -30,8 +30,7 @@ namespace trail_mapper
                 {
                     App.Breadcrumb = "loading geolocator";
                     _geolocator = new Geolocator();
-                    _geolocator.DesiredAccuracy = IsolatedStorageSettings.ApplicationSettings.Contains("TrackingAccuracy") ?
-                        IsolatedStorageSettings.ApplicationSettings["TrackingAccuracy"].ToString() == "High" ? PositionAccuracy.High : PositionAccuracy.Default : PositionAccuracy.Default;
+                    _geolocator.DesiredAccuracy = PositionAccuracy.High;
                     _geolocator.MovementThreshold = IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold") ?
                         double.Parse(IsolatedStorageSettings.ApplicationSettings["MovementThreshold"].ToString()) : DefaultMovementThreshold;
                 }

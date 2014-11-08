@@ -37,19 +37,19 @@
                         <phone:LongListSelector Margin="12,0,12,0" ItemsSource="{Binding MapItems}">
                             <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="0,2,0,4" 
-                                                Height="75" Width="432" Name="SongPanel" 
-                                                Tap="StackPanel_Tap" Tag="{Binding}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,2,0,14" 
+                                		Height="85" Width="432" x:Name="SongPanel" 
+                                		Tap="StackPanel_Tap" Tag="{Binding}">
                                         <Border BorderThickness="1" Width="10" Height="99" BorderBrush="#FFFFC700" Background="#FFFFC700"/>
-                                        <!--<Image Source="{Binding AlbumArt}" Width="100" Height="100"/>-->
                                         <StackPanel Width="311" Margin="12,-7,0,0">
                                             <TextBlock Text="{Binding Name}" Margin="0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
                                             <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                            <TextBlock Text="{Binding RecordedDate}" TextWrapping="Wrap" Margin="0,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
                                         </StackPanel>
                                         <toolkit:ContextMenuService.ContextMenu>
                                             <toolkit:ContextMenu IsZoomEnabled="True">
-                                                <!--<toolkit:MenuItem Header="email data" Click="ShareData_Click" Tag="{Binding}"/>-->
                                                 <toolkit:MenuItem Header="delete" Click="Delete_Click" Tag="{Binding}"/>
+                                                <toolkit:MenuItem Header="upload" Click="Upload_Click" Tag="{Binding}"/>
                                             </toolkit:ContextMenu>
                                         </toolkit:ContextMenuService.ContextMenu>
                                     </StackPanel>
@@ -62,52 +62,17 @@
             
             <phone:PanoramaItem Header="Settings">
                 <StackPanel x:Name="ContentPanel" Margin="0,-24,0,0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="55" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Path=LocalizedResources.SettingsAllowLocation, Source={StaticResource LocalizedStrings}}" 
+                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAllowLocation, Source={StaticResource LocalizedStrings}}" 
                             Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
                             Grid.Row="0"
                             Grid.Column="0"
                             Margin="12,0,0,0"/>
-                        <CheckBox Name="AllowLocationCheckbox"
-                                    Checked="AllowLocationCheckbox_Checked"
-                                    Unchecked="AllowLocationCheckbox_Unchecked"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Margin="0,-8,0,-10"
-                                    VerticalAlignment="Top"/>
-                    </Grid>
-                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAutoStopMaxTime, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
-                       Margin="12,28,0,0"/>
-                    <toolkit:ListPicker
-                        Name="AutoStopMaxTimeList"
-                        Margin="12,0,12,0"
-                        SelectedIndex="2"
-                        SelectionChanged="AutoStopMaxTimeList_SelectionChanged">
-                        <toolkit:ListPickerItem Tag="1">1 minute</toolkit:ListPickerItem>
-                        <toolkit:ListPickerItem Tag="30">30 minutes</toolkit:ListPickerItem>
-                        <toolkit:ListPickerItem Tag="60">1 hour</toolkit:ListPickerItem>
-                        <toolkit:ListPickerItem Tag="120">2 hours</toolkit:ListPickerItem>
-                        <!--<toolkit:ListPickerItem Tag="180">3 hours</toolkit:ListPickerItem>
-                        <toolkit:ListPickerItem Tag="240">4 hours</toolkit:ListPickerItem>-->
-                    </toolkit:ListPicker>
-
-                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAccuracy, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
-                       Margin="12,28,0,0"/>
-                    <toolkit:ListPicker
-                        Name="AccuracyList"
-                        Margin="12,0,12,0"
-                        SelectedIndex="0"
-                        SelectionChanged="AccuracyList_SelectionChanged">
-                        <toolkit:ListPickerItem Tag="Low">Low (better battery life)</toolkit:ListPickerItem>
-                        <toolkit:ListPickerItem Tag="High">High (better map results)</toolkit:ListPickerItem>
-                    </toolkit:ListPicker>
-
+                    <toolkit:ToggleSwitch Name="AllowLocationToggle" 
+                            Unchecked="AllowLocationCheckbox_Unchecked" 
+                            Checked="AllowLocationCheckbox_Checked" 
+                            Grid.Row="0" Grid.Column="1"
+                            IsChecked="true" />
+                    
                     <TextBlock Text="{Binding Path=LocalizedResources.SettingsMovementThreshold, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
                        Margin="12,28,0,0"/>
@@ -155,7 +120,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Name="EmailButton" Click="EmailButton_Click" Background="Goldenrod" BorderThickness="0" Grid.Column="0" Grid.Row="2">
+                    <Button Name="EmailButton" Click="EmailButton_Click" Background="Goldenrod" BorderThickness="0" Grid.Column="0" Grid.Row="1" Margin="0,206,0,4" Grid.RowSpan="2">
                         <StackPanel>
                             <Image Source="Assets/About/appbar.email.png" MaxHeight="120" />
                             <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonEmail, Source={StaticResource LocalizedStrings}}" />

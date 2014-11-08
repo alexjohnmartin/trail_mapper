@@ -8,7 +8,8 @@ namespace trail_mapper
 {
     public enum RecordingState
     {
-        New = 0,
+        Unknown = 0,
+        New,
         RecordingStarted,
         RecordingFinished,
         Saved,
