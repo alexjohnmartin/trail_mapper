@@ -39,7 +39,7 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="0,2,0,14" 
                                 		Height="85" Width="432" x:Name="SongPanel" 
-                                		Tap="StackPanel_Tap" Tag="{Binding}">
+                                		Tap="StackPanel_Tap" Tag="{Binding}" toolkit:TiltEffect.IsTiltEnabled="True">
                                         <Border BorderThickness="1" Width="10" Height="99" BorderBrush="#FFFFC700" Background="#FFFFC700"/>
                                         <StackPanel Width="311" Margin="12,-7,0,0">
                                             <TextBlock Text="{Binding Name}" Margin="0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
