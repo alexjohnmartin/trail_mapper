@@ -17,6 +17,9 @@ using Windows.Devices.Geolocation;
 //running location tracking apps in the background
 //http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj662935%28v=vs.105%29.aspx
 
+//tilt effect on controls
+//http://developer.nokia.com/community/wiki/Tilt_Effect_for_Windows_Phone
+
 namespace trail_mapper
 {
     public partial class MainPage : PhoneApplicationPage
