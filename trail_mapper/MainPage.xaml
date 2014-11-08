@@ -8,7 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -17,19 +16,21 @@
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-         <!--Panorama control-->
-        <phone:Panorama Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Margin="0,0,0,0">
-            <!--<phone:Panorama.Background>
-                <ImageBrush ImageSource="/trail_mapper;component/Assets/HoneycombBackground.png"/>
-            </phone:Panorama.Background>-->
-            <!--<phone:Panorama.Background>
-                <ImageBrush ImageSource="/Assets/AlignmentGrid.png"/>
-            </phone:Panorama.Background>-->
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,14">
+            <!--<TextBlock Text="Trail Mapper" Style="{StaticResource PhoneTextNormalStyle}"/>-->
+            <TextBlock Text="Trail Mapper" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
 
-            <!--Panorama item one-->
-            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.TrailMapsHeader, Source={StaticResource LocalizedStrings}}">
-                <ScrollViewer Margin="0,-28,0,0">
+        <!--<phone:Panorama Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Margin="0,0,0,0">-->
+            
+            <!--<phone:PanoramaItem Header="{Binding Path=LocalizedResources.TrailMapsHeader, Source={StaticResource LocalizedStrings}}">-->
+                <ScrollViewer Margin="12,0,12,0" Grid.Row="1">
                     <StackPanel>
                         <Button Name="NewTrailButton" Click="NewTrailButton_Click">
                             <TextBlock Text="{Binding Path=LocalizedResources.RecordNewTrailButton, Source={StaticResource LocalizedStrings}}"/>
@@ -58,135 +59,7 @@
                         </phone:LongListSelector>
                     </StackPanel>
                 </ScrollViewer>
-            </phone:PanoramaItem>
             
-            <phone:PanoramaItem Header="Settings">
-                <StackPanel x:Name="ContentPanel" Margin="0,-24,0,0">
-                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsAllowLocation, Source={StaticResource LocalizedStrings}}" 
-                            Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="12,0,0,0"/>
-                    <toolkit:ToggleSwitch Name="AllowLocationToggle" 
-                            Unchecked="AllowLocationCheckbox_Unchecked" 
-                            Checked="AllowLocationCheckbox_Checked" 
-                            Grid.Row="0" Grid.Column="1"
-                            IsChecked="true" />
-                    
-                    <TextBlock Text="{Binding Path=LocalizedResources.SettingsMovementThreshold, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"
-                       Margin="12,28,0,0"/>
-                    <toolkit:ListPicker
-                        Name="MovementThresholdList"
-                        Margin="12,0,12,0"
-                        SelectedIndex="1"
-                        SelectionChanged="MovementThresholdList_SelectionChanged">
-                        <toolkit:ListPickerItem Tag="10">10 meters</toolkit:ListPickerItem>
-                        <toolkit:ListPickerItem Tag="25">25 meters</toolkit:ListPickerItem>
-                        <toolkit:ListPickerItem Tag="50">50 meters</toolkit:ListPickerItem>
-                    </toolkit:ListPicker>
-                </StackPanel>
-            </phone:PanoramaItem>
-
-            <phone:PanoramaItem Header="{Binding Path=LocalizedResources.AboutHeader, Source={StaticResource LocalizedStrings}}">
-                <Grid x:Name="AboutPanel" Grid.Row="1" Margin="0,-24,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="85" />
-                        <RowDefinition Height="210" />
-                        <RowDefinition Height="210" />
-                        <RowDefinition Height="210" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="210" />
-                        <ColumnDefinition Width="210" />
-                        <ColumnDefinition Width="210" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="{Binding Path=LocalizedResources.AboutDescription, Source={StaticResource LocalizedStrings}}"
-                               Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                               TextWrapping="Wrap" Margin="12, 0, 0, 0"/>
-
-                    <Button Name="TwitterButton" Click="TwitterButton_Click" Background="Red" BorderThickness="0" Grid.Column="0" Grid.Row="1">
-                        <StackPanel>
-                            <Image Source="Assets/About/appbar.social.twitter.png" MaxHeight="120" />
-                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonTwitter, Source={StaticResource LocalizedStrings}}" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Name="ReviewButton" Click="ReviewButton_Click" Background="OrangeRed" BorderThickness="0" Grid.Column="1" Grid.Row="1">
-                        <StackPanel>
-                            <Image Source="Assets/About/appbar.message.smiley.png" MaxHeight="120" />
-                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonReview, Source={StaticResource LocalizedStrings}}" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Name="EmailButton" Click="EmailButton_Click" Background="Goldenrod" BorderThickness="0" Grid.Column="0" Grid.Row="1" Margin="0,206,0,4" Grid.RowSpan="2">
-                        <StackPanel>
-                            <Image Source="Assets/About/appbar.email.png" MaxHeight="120" />
-                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonEmail, Source={StaticResource LocalizedStrings}}" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Name="StoreButton" Click="StoreButton_Click" Background="Green" BorderThickness="0" Grid.Column="1" Grid.Row="2">
-                        <StackPanel>
-                            <Image Source="Assets/About/appbar.marketplace.png" MaxHeight="120" />
-                            <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonStore, Source={StaticResource LocalizedStrings}}" />
-                        </StackPanel>
-                    </Button>
-                </Grid>
-            </phone:PanoramaItem>
-            
-            <!--Panorama item two-->
-            <!--<phone:PanoramaItem>
-                <phone:LongListSelector Margin="0,-38,-22,2" ItemsSource="{Binding Items}">
-                    <phone:LongListSelector.ListHeaderTemplate>
-                        <DataTemplate>
-                            <Grid Margin="12,0,0,38">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="second item"
-                                           Style="{StaticResource PanoramaItemHeaderTextStyle}"
-                                           Grid.Row="0"/>
-                            </Grid>
-                        </DataTemplate>
-                    </phone:LongListSelector.ListHeaderTemplate>
-                    <phone:LongListSelector.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Width="432">
-                                <Border BorderThickness="1" Width="99" Height="99" BorderBrush="#FFFFC700" Background="#FFFFC700"/>
-                                <StackPanel Width="311" Margin="8,-7,0,0">
-                                    <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
-                                    <TextBlock Text="{Binding LineTwo}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                    </phone:LongListSelector.ItemTemplate>
-                </phone:LongListSelector>
-            </phone:PanoramaItem>-->
-
-            <!--Panorama item three-->
-            <!--<phone:PanoramaItem Header="third item" Orientation="Horizontal">
-                <Grid>
-                    <StackPanel Margin="0,4,16,0" Orientation="Vertical" VerticalAlignment="Top">
-                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                        </StackPanel>
-                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="0,12,0,0">
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                            <Border Background="#FFFFC700" Height="173" Width="173" Margin="12,0,0,0"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </phone:PanoramaItem>-->
-        </phone:Panorama>
-
         <!--Uncomment to see an alignment grid to help ensure your controls are
             aligned on common boundaries.  The image has a top margin of -32px to
             account for the System Tray. Set this to 0 (or remove the margin altogether)

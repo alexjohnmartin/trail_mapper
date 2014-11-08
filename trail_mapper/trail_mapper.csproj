@@ -90,6 +90,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -105,6 +108,9 @@
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
     <Compile Include="SaveHelper.cs" />
+    <Compile Include="SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TrackTrailPage.xaml.cs">
       <DependentUpon>TrackTrailPage.xaml</DependentUpon>
     </Compile>
@@ -122,6 +128,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
+    <Page Include="SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TrackTrailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -163,8 +177,11 @@
     <Content Include="Assets\Appbar\appbar.database.png" />
     <Content Include="Assets\Appbar\appbar.delete-small.png" />
     <Content Include="Assets\Appbar\appbar.delete.png" />
+    <Content Include="Assets\Appbar\appbar.information.png" />
     <Content Include="Assets\Appbar\appbar.map.treasure.png" />
     <Content Include="Assets\Appbar\appbar.save-small.png" />
+    <Content Include="Assets\Appbar\appbar.settings.png" />
+    <Content Include="Assets\Appbar\appbar.upload.png" />
     <Content Include="Assets\HoneycombBackground.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />

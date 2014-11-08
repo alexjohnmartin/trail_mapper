@@ -43,7 +43,7 @@ namespace trail_mapper
             DeleteButton.Click += Delete_Click;
             ApplicationBar.Buttons.Add(DeleteButton);
 
-            var UploadButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.database.png", UriKind.Relative));
+            var UploadButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.upload.png", UriKind.Relative));
             UploadButton.Text = "upload"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
             UploadButton.Click += Upload_Click;
             ApplicationBar.Buttons.Add(UploadButton);

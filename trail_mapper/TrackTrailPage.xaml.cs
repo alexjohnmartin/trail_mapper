@@ -191,7 +191,7 @@ namespace trail_mapper
             DiscardButton.IsEnabled = App.ViewModel.State == RecordingState.RecordingFinished;
             TrailNameTextbox.IsEnabled = App.ViewModel.State == RecordingState.RecordingFinished;
             StopTrackingButton.IsEnabled = App.ViewModel.State == RecordingState.RecordingStarted;
-            UploadButton.IsEnabled = App.ViewModel.TrailHistory == null || App.ViewModel.TrailHistory.Count > 0;
+            //UploadButton.IsEnabled = App.ViewModel.TrailHistory == null || App.ViewModel.TrailHistory.Count > 0;
             if (App.ViewModel.State == RecordingState.New) TrailNameTextbox.Text = _newTrailText;
         }
 

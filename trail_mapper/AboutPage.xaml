@@ -1,0 +1,77 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="trail_mapper.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,14">
+            <TextBlock Text="Trail Mapper" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="about" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="85" />
+                    <RowDefinition Height="210" />
+                    <RowDefinition Height="210" />
+                    <RowDefinition Height="210" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210" />
+                    <ColumnDefinition Width="210" />
+                    <ColumnDefinition Width="210" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Path=LocalizedResources.AboutDescription, Source={StaticResource LocalizedStrings}}"
+                               Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                               TextWrapping="Wrap" Margin="12, 0, 0, 0"/>
+
+                <Button Name="TwitterButton" Click="TwitterButton_Click" Background="Red" BorderThickness="0" Grid.Column="0" Grid.Row="1">
+                    <StackPanel>
+                        <Image Source="Assets/About/appbar.social.twitter.png" MaxHeight="120" />
+                        <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonTwitter, Source={StaticResource LocalizedStrings}}" />
+                    </StackPanel>
+                </Button>
+
+                <Button Name="ReviewButton" Click="ReviewButton_Click" Background="OrangeRed" BorderThickness="0" Grid.Column="1" Grid.Row="1">
+                    <StackPanel>
+                        <Image Source="Assets/About/appbar.message.smiley.png" MaxHeight="120" />
+                        <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonReview, Source={StaticResource LocalizedStrings}}" />
+                    </StackPanel>
+                </Button>
+
+                <Button Name="EmailButton" Click="EmailButton_Click" Background="Goldenrod" BorderThickness="0" Grid.Column="0" Grid.Row="1" Margin="0,206,0,4" Grid.RowSpan="2">
+                    <StackPanel>
+                        <Image Source="Assets/About/appbar.email.png" MaxHeight="120" />
+                        <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonEmail, Source={StaticResource LocalizedStrings}}" />
+                    </StackPanel>
+                </Button>
+
+                <Button Name="StoreButton" Click="StoreButton_Click" Background="Green" BorderThickness="0" Grid.Column="1" Grid.Row="2">
+                    <StackPanel>
+                        <Image Source="Assets/About/appbar.marketplace.png" MaxHeight="120" />
+                        <TextBlock Text="{Binding Path=LocalizedResources.AboutButtonStore, Source={StaticResource LocalizedStrings}}" />
+                    </StackPanel>
+                </Button>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>

@@ -59,7 +59,7 @@ namespace trail_mapper
                     //txtStatus.Text = "Upload status: " + responseString;
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 //TODO:log error
             }

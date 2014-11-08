@@ -21,7 +21,7 @@ namespace trail_mapper
                     using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
                         iso.DeleteFile("AutoSave-" + _recordingStartTime.ToString("yyyyMMdd-hhmmss"));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //TODO:log error
                 }
