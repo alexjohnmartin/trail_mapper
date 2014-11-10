@@ -30,7 +30,7 @@ namespace trail_mapper
                 {
                     App.Breadcrumb = "loading geolocator";
                     _geolocator = new Geolocator();
-                    _geolocator.DesiredAccuracy = PositionAccuracy.High;
+                    _geolocator.DesiredAccuracy = PositionAccuracy.Default;
                     _geolocator.MovementThreshold = IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold") ?
                         double.Parse(IsolatedStorageSettings.ApplicationSettings["MovementThreshold"].ToString()) : DefaultMovementThreshold;
                 }

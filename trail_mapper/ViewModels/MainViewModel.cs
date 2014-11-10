@@ -17,6 +17,8 @@ namespace trail_mapper.ViewModels
             this.Items = new ObservableCollection<ItemViewModel>();
         }
 
+        public ObservableCollection<model> Products { get; private set; }
+        
         public ObservableCollection<ItemViewModel> Items { get; private set; }
         public ObservableCollection<TrailMap> MapItems { get; private set; }
         public IList<HistoryItem> TrailHistory { get; set; }
@@ -31,6 +33,8 @@ namespace trail_mapper.ViewModels
 
         public void LoadData()
         {
+            Products = new ObservableCollection<model>();
+
             MapItems = new ObservableCollection<TrailMap>(); 
             using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
             {
