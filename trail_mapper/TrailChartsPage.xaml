@@ -64,41 +64,47 @@
         </Grid.Resources>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+        <StackPanel Grid.Row="0" Margin="12,17,0,0">
             <TextBlock Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <chart:SfChart Grid.Row="1" Margin="0,0,10,0" x:Name="AreaChart" AreaBorderThickness="1" HorizontalAlignment="Center" Grid.RowSpan="2">
-            <chart:SfChart.PrimaryAxis>
-                <chart:CategoryAxis PlotOffset="20" x:Name="axis1" Header="Time"  MajorGridLineStyle="{StaticResource majorTickLineStyle}"
-                                         LabelTemplate="{StaticResource labelTemplate}"  HeaderTemplate="{StaticResource headerTemplate}"></chart:CategoryAxis>
-                <!--<chart:CategoryAxis></chart:CategoryAxis>-->
-            </chart:SfChart.PrimaryAxis>
-            <chart:SfChart.SecondaryAxis>
-                <chart:NumericalAxis Header="Altitude" HeaderTemplate="{StaticResource headerTemplate}"  
-                                  Minimum="0" Maximum="100" Interval="10" AxisLineStyle="{StaticResource axisLineStyle}"   LabelTemplate="{StaticResource labelTemplate}"></chart:NumericalAxis>
-            </chart:SfChart.SecondaryAxis>
+        <ScrollViewer Grid.Row="1" Margin="0,0,0,0">
+            <StackPanel>
+                <TextBlock Text="Altitude" Margin="12,0,12,12" Style="{StaticResource PhoneTextTitle1Style}"/>
+                <chart:SfChart x:Name="AltitudeAreaChart" AreaBorderThickness="1" HorizontalAlignment="Center">
+                    <chart:SfChart.PrimaryAxis>
+                        <chart:CategoryAxis PlotOffset="20" x:Name="axis1" Header="Time"  MajorGridLineStyle="{StaticResource majorTickLineStyle}"
+                                             LabelTemplate="{StaticResource labelTemplate}"  HeaderTemplate="{StaticResource headerTemplate}"></chart:CategoryAxis>
+                        <!--<chart:CategoryAxis></chart:CategoryAxis>-->
+                    </chart:SfChart.PrimaryAxis>
+                    <chart:SfChart.SecondaryAxis>
+                        <chart:NumericalAxis Header="Metres" HeaderTemplate="{StaticResource headerTemplate}"  
+                                      Minimum="0" Maximum="100" Interval="10" AxisLineStyle="{StaticResource axisLineStyle}"   
+                                      LabelTemplate="{StaticResource labelTemplate}"></chart:NumericalAxis>
+                    </chart:SfChart.SecondaryAxis>
 
-            <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="AreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Altitudes}" Label="India">
-                <!--<chart:AreaSeries.AdornmentsInfo>
-                    <chart:ChartAdornmentInfo AdornmentsPosition="Bottom"  HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                                  ConnectorLineStyle="{StaticResource lineStyle}" ShowConnectorLine="False" 
-                                                  ConnectorHeight="30" ShowLabel="True">
-                        <chart:ChartAdornmentInfo.LabelTemplate>
+                    <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="AltitudeAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Altitudes}" Label="India">
+                    </chart:AreaSeries>
+                </chart:SfChart>
 
-                            <DataTemplate>
-                                <Grid>
-                                    <Ellipse Height="27" Width="27" Stroke="#FF1BA1E2" Fill="{StaticResource PhoneForegroundBrush}" StrokeThickness="2" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI" Foreground="{StaticResource PhoneBackgroundBrush}"  FontSize="16"/>
-                                </Grid>
-                            </DataTemplate>
+                <TextBlock Text="Speed" Margin="12,0,12,12" Style="{StaticResource PhoneTextTitle1Style}"/>
+                <chart:SfChart x:Name="SpeedAreaChart" AreaBorderThickness="1" HorizontalAlignment="Center">
+                    <chart:SfChart.PrimaryAxis>
+                        <chart:CategoryAxis PlotOffset="20" x:Name="axis2" Header="Time"  MajorGridLineStyle="{StaticResource majorTickLineStyle}"
+                                             LabelTemplate="{StaticResource labelTemplate}"  HeaderTemplate="{StaticResource headerTemplate}"></chart:CategoryAxis>
+                        <!--<chart:CategoryAxis></chart:CategoryAxis>-->
+                    </chart:SfChart.PrimaryAxis>
+                    <chart:SfChart.SecondaryAxis>
+                        <chart:NumericalAxis Header="Km/h" HeaderTemplate="{StaticResource headerTemplate}"  
+                                      Minimum="0" Maximum="100" Interval="10" AxisLineStyle="{StaticResource axisLineStyle}"   
+                                      LabelTemplate="{StaticResource labelTemplate}"></chart:NumericalAxis>
+                    </chart:SfChart.SecondaryAxis>
 
-                        </chart:ChartAdornmentInfo.LabelTemplate>
-                    </chart:ChartAdornmentInfo>
-                </chart:AreaSeries.AdornmentsInfo>-->
-            </chart:AreaSeries>
-        </chart:SfChart>
+                    <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="SpeedAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Speeds}" Label="India">
+                    </chart:AreaSeries>
+                </chart:SfChart>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 
 </phone:PhoneApplicationPage>

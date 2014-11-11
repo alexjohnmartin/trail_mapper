@@ -34,7 +34,9 @@ namespace trail_mapper
         private void LoadTrailData(TrailMap trailMap)
         {
             int index = 0;
+            App.ViewModel.Speeds.Clear();
             App.ViewModel.Altitudes.Clear();
+            if (trailMap.History == null || trailMap.History.Count() == 0) return;
 
             var startTime = trailMap.History.Min(p => p.Time);
             var endTime = trailMap.History.Max(p => p.Time);
@@ -42,9 +44,12 @@ namespace trail_mapper
             var numberOfPointsOnGraph = 20;
             var timeBetweenPointsInSeconds = lengthInSeconds / numberOfPointsOnGraph;
 
-            var axis = (Syncfusion.UI.Xaml.Charts.NumericalAxis)AreaChart.SecondaryAxis;
+            var axis = (Syncfusion.UI.Xaml.Charts.NumericalAxis)AltitudeAreaChart.SecondaryAxis;
             axis.Minimum = trailMap.History.Min(p => p.Altitude);
             axis.Maximum = trailMap.History.Max(p => p.Altitude);
+            axis = (Syncfusion.UI.Xaml.Charts.NumericalAxis)SpeedAreaChart.SecondaryAxis;
+            axis.Minimum = trailMap.History.Min(p => p.Speed) * 3.6; //metres-per-second to km/h
+            axis.Maximum = trailMap.History.Max(p => p.Speed) * 3.6;
             foreach (var point in trailMap.History)
             {
                 var pointTime = point.Time.Subtract(startTime); 
@@ -54,8 +59,14 @@ namespace trail_mapper
                     App.ViewModel.Altitudes.Add(new model
                     {
                         ProdId = index,
-                        Prodname = index % 5 == 1 ? pointTime.ToString(@"h\:mm\:ss") : string.Empty,
+                        Prodname = index % 3 == 1 ? pointTime.ToString(@"h\:mm\:ss") : string.Empty,
                         Value = point.Altitude
+                    });
+                    App.ViewModel.Speeds.Add(new model
+                    {
+                        ProdId = index,
+                        Prodname = index % 3 == 1 ? pointTime.ToString(@"h\:mm\:ss") : string.Empty,
+                        Value = point.Speed * 3.6
                     });
                 }
             }

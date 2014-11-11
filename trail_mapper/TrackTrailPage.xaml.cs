@@ -69,7 +69,7 @@ namespace trail_mapper
                 if (args.Position.Coordinate.PositionSource == PositionSource.Satellite)
                 {
                     if (App.ViewModel.State == RecordingState.RecordingStarted)
-                        App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.UtcNow, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude });
+                        App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.UtcNow, Altitude = args.Position.Coordinate.Altitude.Value, Latitude = args.Position.Coordinate.Latitude, Longitude = args.Position.Coordinate.Longitude, Speed = args.Position.Coordinate.Speed.Value });
 
                     if (!App.RunningInBackground)
                     {
@@ -107,7 +107,7 @@ namespace trail_mapper
             Geoposition position = await App.Geolocator.GetGeopositionAsync();
             if (position.Coordinate.PositionSource == PositionSource.Satellite)
             {
-                App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.UtcNow, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude });
+                App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.UtcNow, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude, Speed = position.Coordinate.Speed.Value });
                 Dispatcher.BeginInvoke(() => { UpdateButtons(); UpdateStatistics(); });
             }
         }
