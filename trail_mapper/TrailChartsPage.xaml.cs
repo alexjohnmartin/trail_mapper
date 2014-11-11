@@ -36,20 +36,27 @@ namespace trail_mapper
             int index = 0;
             App.ViewModel.Products.Clear();
 
-            var mod = trailMap.History.Count / 10;
+            var startTime = trailMap.History.Min(p => p.Time);
+            var endTime = trailMap.History.Max(p => p.Time);
+            var lengthInSeconds = endTime.Subtract(startTime).TotalSeconds;
+            var numberOfPointsOnGraph = 20;
+            var timeBetweenPointsInSeconds = lengthInSeconds / numberOfPointsOnGraph;
+
             var axis = (Syncfusion.UI.Xaml.Charts.NumericalAxis)AreaChart.SecondaryAxis;
             axis.Minimum = trailMap.History.Min(p => p.Altitude);
             axis.Maximum = trailMap.History.Max(p => p.Altitude);
             foreach (var point in trailMap.History)
             {
-                index++;
-                if (index % mod == 0)
+                if (point.Time.Subtract(startTime).TotalSeconds >= index * timeBetweenPointsInSeconds)
+                {
                     App.ViewModel.Products.Add(new model
                     {
                         ProdId = index,
                         Prodname = "",
                         Stock = point.Altitude
                     });
+                    index++;
+                }
             }
         }
     }
