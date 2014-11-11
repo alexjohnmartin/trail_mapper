@@ -34,7 +34,7 @@ namespace trail_mapper
         private void LoadTrailData(TrailMap trailMap)
         {
             int index = 0;
-            App.ViewModel.Products.Clear();
+            App.ViewModel.Altitudes.Clear();
 
             var startTime = trailMap.History.Min(p => p.Time);
             var endTime = trailMap.History.Max(p => p.Time);
@@ -47,15 +47,16 @@ namespace trail_mapper
             axis.Maximum = trailMap.History.Max(p => p.Altitude);
             foreach (var point in trailMap.History)
             {
-                if (point.Time.Subtract(startTime).TotalSeconds >= index * timeBetweenPointsInSeconds)
+                var pointTime = point.Time.Subtract(startTime); 
+                if (pointTime.TotalSeconds >= index * timeBetweenPointsInSeconds)
                 {
-                    App.ViewModel.Products.Add(new model
+                    index++;
+                    App.ViewModel.Altitudes.Add(new model
                     {
                         ProdId = index,
-                        Prodname = "",
-                        Stock = point.Altitude
+                        Prodname = index % 5 == 1 ? pointTime.ToString(@"h\:mm\:ss") : string.Empty,
+                        Value = point.Altitude
                     });
-                    index++;
                 }
             }
         }
@@ -65,7 +66,7 @@ namespace trail_mapper
     {
         public double ProdId { get; set; }
         public string Prodname { get; set; }
-        public double Stock { get; set; }
+        public double Value { get; set; }
     }
 
     public class viewmodel
@@ -74,13 +75,13 @@ namespace trail_mapper
         {
             this.Products = new ObservableCollection<model>();
 
-            Products.Add(new model() { ProdId = 1, Prodname = "Rice", Stock = 53 });
-            Products.Add(new model() { ProdId = 2, Prodname = "Wheat", Stock = 76 });
-            Products.Add(new model() { ProdId = 3, Prodname = "Oil", Stock = 80 });
-            Products.Add(new model() { ProdId = 4, Prodname = "Corn", Stock = 50 });
-            Products.Add(new model() { ProdId = 5, Prodname = "Gram", Stock = 68 });
-            Products.Add(new model() { ProdId = 6, Prodname = "Milk", Stock = 90 });
-            Products.Add(new model() { ProdId = 7, Prodname = "Butter", Stock = 73 });
+            Products.Add(new model() { ProdId = 1, Prodname = "Rice", Value = 53 });
+            Products.Add(new model() { ProdId = 2, Prodname = "Wheat", Value = 76 });
+            Products.Add(new model() { ProdId = 3, Prodname = "Oil", Value = 80 });
+            Products.Add(new model() { ProdId = 4, Prodname = "Corn", Value = 50 });
+            Products.Add(new model() { ProdId = 5, Prodname = "Gram", Value = 68 });
+            Products.Add(new model() { ProdId = 6, Prodname = "Milk", Value = 90 });
+            Products.Add(new model() { ProdId = 7, Prodname = "Butter", Value = 73 });
         }
 
         public ObservableCollection<model> Products { get; set; }

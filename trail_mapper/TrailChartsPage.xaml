@@ -80,8 +80,8 @@
                                   Minimum="0" Maximum="100" Interval="10" AxisLineStyle="{StaticResource axisLineStyle}"   LabelTemplate="{StaticResource labelTemplate}"></chart:NumericalAxis>
             </chart:SfChart.SecondaryAxis>
 
-            <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="AreaSeries" XBindingPath="Prodname" YBindingPath="Stock" ItemsSource="{Binding Products}" Label="India">
-                <chart:AreaSeries.AdornmentsInfo>
+            <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="AreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Altitudes}" Label="India">
+                <!--<chart:AreaSeries.AdornmentsInfo>
                     <chart:ChartAdornmentInfo AdornmentsPosition="Bottom"  HorizontalAlignment="Center" VerticalAlignment="Center" 
                                                   ConnectorLineStyle="{StaticResource lineStyle}" ShowConnectorLine="False" 
                                                   ConnectorHeight="30" ShowLabel="True">
@@ -96,7 +96,7 @@
 
                         </chart:ChartAdornmentInfo.LabelTemplate>
                     </chart:ChartAdornmentInfo>
-                </chart:AreaSeries.AdornmentsInfo>
+                </chart:AreaSeries.AdornmentsInfo>-->
             </chart:AreaSeries>
         </chart:SfChart>
     </Grid>
