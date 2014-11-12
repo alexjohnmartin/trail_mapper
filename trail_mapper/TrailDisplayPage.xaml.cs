@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
+using trail_mapper.ViewModels;
 
 namespace trail_mapper
 {
@@ -26,6 +27,8 @@ namespace trail_mapper
         {
             InitializeComponent();
             DataContext = App.ViewModel.SelectedTrail;
+            AltitudeStackPanel.DataContext = App.ViewModel;
+            SpeedStackPanel.DataContext = App.ViewModel;
             BuildApplicationBar();
         }
 
@@ -76,7 +79,7 @@ namespace trail_mapper
         //    var filePath = SaveMapImageToMediaLibrary();
         //    if (!string.IsNullOrEmpty(filePath))
         //    {
-        //        ShareMediaTask shareTask = new ShareMediaTask();
+        //        ShareMediaTask shareTask = new ShareMe2diaTask();
         //        shareTask.FilePath = filePath;
         //        shareTask.Show();
         //    }
@@ -124,6 +127,52 @@ namespace trail_mapper
 
             HereMap.MapElements.Add(dynamicPolyline);
             HereMap.Center = App.ViewModel.SelectedTrail.Centre;
+
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                LoadTrailData(App.ViewModel.SelectedTrail);
+            }
+        }
+
+        private void LoadTrailData(TrailMap trailMap)
+        {
+            int index = 0;
+            App.ViewModel.Speeds.Clear();
+            App.ViewModel.Altitudes.Clear();
+            if (trailMap.History == null || trailMap.History.Count() == 0) return;
+
+            var startTime = trailMap.History.Min(p => p.Time);
+            var endTime = trailMap.History.Max(p => p.Time);
+            var lengthInSeconds = endTime.Subtract(startTime).TotalSeconds;
+            var numberOfPointsOnGraph = 20;
+            var timeBetweenPointsInSeconds = lengthInSeconds / numberOfPointsOnGraph;
+
+            var axis = (Syncfusion.UI.Xaml.Charts.NumericalAxis)AltitudeAreaChart.SecondaryAxis;
+            axis.Minimum = trailMap.History.Min(p => p.Altitude);
+            axis.Maximum = trailMap.History.Max(p => p.Altitude);
+            axis = (Syncfusion.UI.Xaml.Charts.NumericalAxis)SpeedAreaChart.SecondaryAxis;
+            axis.Minimum = trailMap.History.Min(p => p.Speed) * 3.6; //metres-per-second to km/h
+            axis.Maximum = trailMap.History.Max(p => p.Speed) * 3.6;
+            foreach (var point in trailMap.History)
+            {
+                var pointTime = point.Time.Subtract(startTime);
+                if (pointTime.TotalSeconds >= index * timeBetweenPointsInSeconds)
+                {
+                    index++;
+                    App.ViewModel.Altitudes.Add(new model
+                    {
+                        ProdId = index,
+                        Prodname = index % 3 == 1 ? pointTime.ToString(@"h\:mm\:ss") : string.Empty,
+                        Value = point.Altitude
+                    });
+                    App.ViewModel.Speeds.Add(new model
+                    {
+                        ProdId = index,
+                        Prodname = index % 3 == 1 ? pointTime.ToString(@"h\:mm\:ss") : string.Empty,
+                        Value = point.Speed * 3.6
+                    });
+                }
+            }
         }
 
         private void HereMap_Loaded(object sender, RoutedEventArgs e)

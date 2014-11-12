@@ -100,8 +100,7 @@ namespace trail_mapper
             var trailMap = (TrailMap)((StackPanel)sender).Tag;
             //trailMap.CleanUpData();
             App.ViewModel.SelectedTrail = trailMap; 
-            //NavigationService.Navigate(new Uri("/TrailDisplayPage.xaml", UriKind.Relative));
-            NavigationService.Navigate(new Uri("/TrailChartsPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/TrailDisplayPage.xaml", UriKind.Relative));
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)

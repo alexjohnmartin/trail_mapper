@@ -114,9 +114,6 @@
     <Compile Include="TrackTrailPage.xaml.cs">
       <DependentUpon>TrackTrailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TrailChartsPage.xaml.cs">
-      <DependentUpon>TrailChartsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TrailDisplayPage.xaml.cs">
       <DependentUpon>TrailDisplayPage.xaml</DependentUpon>
     </Compile>
@@ -124,6 +121,7 @@
     <Compile Include="ViewModels\HistoryItem.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\model.cs" />
     <Compile Include="ViewModels\TrailMap.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -148,10 +146,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TrackTrailPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TrailChartsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
