@@ -77,6 +77,126 @@ namespace trail_mapper.ViewModels
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
+        public double MaxAltitude
+        {
+            get
+            {
+                if (History == null || History.Count == 0)
+                    return 0;
+
+                return History.Max(p => p.Altitude);
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public double MinAltitude
+        {
+            get
+            {
+                if (History == null || History.Count == 0)
+                    return 0;
+
+                return History.Min(p => p.Altitude);
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string FormattedMaxMinAltitude
+        {
+            get { return MaxAltitude.ToString("F2") + "m / " + MinAltitude.ToString("F2") + "m"; }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public double MaxSpeed
+        {
+            get
+            {
+                if (History == null || History.Count == 0)
+                    return 0;
+
+                return History.Max(p => p.Speed);
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public double MinSpeed
+        {
+            get
+            {
+                if (History == null || History.Count == 0)
+                    return 0;
+
+                return History.Min(p => p.Speed);
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string FormattedMaxMinSpeed
+        {
+            get { return (MaxSpeed*3.6).ToString("F2") + "km/h / " + (MinSpeed*3.6).ToString("F2") + "km/h"; }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public double TotalElevationGain
+        {
+            get
+            {
+                if (History == null || History.Count == 0)
+                    return 0;
+
+                var gain = 0d;
+                var first = true;
+                var previousHeight = 0d;
+                foreach (var point in History)
+                {
+                    if (first)
+                    {
+                        first = false;
+                        previousHeight = point.Altitude;
+                    }
+                    else if (point.Altitude > previousHeight)
+                    {
+                        gain += (point.Altitude - previousHeight);
+                    }
+                }
+                return gain;
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public double TotalElevationLoss
+        {
+            get
+            {
+                if (History == null || History.Count == 0)
+                    return 0;
+
+                var loss = 0d;
+                var first = true;
+                var previousHeight = 0d;
+                foreach (var point in History)
+                {
+                    if (first)
+                    {
+                        first = false;
+                        previousHeight = point.Altitude;
+                    }
+                    else if (point.Altitude < previousHeight)
+                    {
+                        loss += (previousHeight - point.Altitude);
+                    }
+                }
+                return loss;
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string FormattedElevationGainLoss
+        {
+            get { return TotalElevationGain.ToString("F2") + "m / " + TotalElevationLoss.ToString("F2") + "m"; }
+        }
+
         public string Description
         {
             get

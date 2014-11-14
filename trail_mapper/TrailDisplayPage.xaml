@@ -101,7 +101,7 @@
                           Margin="0,12,0,0"/>
                 
                 <!-- Altitude graph -->
-                <StackPanel Grid.Row="2" Name="AltitudeStackPanel">
+                <StackPanel Grid.Row="2" Name="AltitudeStackPanel" Margin="0,12,0,12">
                     <TextBlock Text="Altitude" Margin="12,0,12,12" Style="{StaticResource PhoneTextTitle2Style}"/>
                     <chart:SfChart x:Name="AltitudeAreaChart" AreaBorderThickness="1" HorizontalAlignment="Center">
                         <chart:SfChart.PrimaryAxis>
@@ -118,10 +118,24 @@
                         <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="AltitudeAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Altitudes}" Label="India">
                         </chart:AreaSeries>
                     </chart:SfChart>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Max/min altitude" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTrail.FormattedMaxMinAltitude}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Elevation gain/loss" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTrail.FormattedElevationGainLoss}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                    </Grid>
                 </StackPanel>
 
                 <!-- Speed graph -->
-                <StackPanel Grid.Row="3" Name="SpeedStackPanel">
+                <StackPanel Grid.Row="3" Name="SpeedStackPanel" Margin="0,0,0,12">
                     <TextBlock Text="Speed" Margin="12,0,12,12" Style="{StaticResource PhoneTextTitle2Style}"/>
                     <chart:SfChart x:Name="SpeedAreaChart" AreaBorderThickness="1" HorizontalAlignment="Center">
                         <chart:SfChart.PrimaryAxis>
@@ -138,6 +152,17 @@
                         <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="SpeedAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Speeds}" Label="India">
                         </chart:AreaSeries>
                     </chart:SfChart>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Max/min speed" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTrail.FormattedMaxMinSpeed}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                    </Grid>
                 </StackPanel>
 
                 
