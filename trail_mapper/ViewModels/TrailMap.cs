@@ -24,7 +24,10 @@ namespace trail_mapper.ViewModels
                 var filename = "trailmap";
 
                 if (!string.IsNullOrEmpty(Name))
-                    filename += "-" + Name.Take(50);
+                    if (Name.Length < 50)
+                        filename += "-" + Name.Replace(" ", "-");
+                    else
+                        filename += "-" + Name.Substring(0, 50).Replace(" ", "-");
 
                 if (History != null && History.Count > 0)
                     filename += "-" + History.First().Time.ToString("yyyy-mm-dd-hh-mm-ss");
