@@ -115,7 +115,7 @@
                                       LabelTemplate="{StaticResource labelTemplate}"></chart:NumericalAxis>
                         </chart:SfChart.SecondaryAxis>
 
-                        <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="AltitudeAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Altitudes}" Label="India">
+                        <chart:AreaSeries ShowEmptyPoints="True" Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="AltitudeAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Altitudes}" Label="India">
                         </chart:AreaSeries>
                     </chart:SfChart>
                     <Grid Grid.Row="0">
@@ -129,8 +129,8 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Max/min altitude" Style="{StaticResource PhoneTextNormalStyle}"/>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTrail.FormattedMaxMinAltitude}" Style="{StaticResource PhoneTextNormalStyle}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Elevation gain/loss" Style="{StaticResource PhoneTextNormalStyle}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTrail.FormattedElevationGainLoss}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <!--<TextBlock Grid.Row="1" Grid.Column="0" Text="Elevation gain/loss" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTrail.FormattedElevationGainLoss}" Style="{StaticResource PhoneTextNormalStyle}"/>-->
                     </Grid>
                 </StackPanel>
 
@@ -149,7 +149,7 @@
                                       LabelTemplate="{StaticResource labelTemplate}"></chart:NumericalAxis>
                         </chart:SfChart.SecondaryAxis>
 
-                        <chart:AreaSeries Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="SpeedAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Speeds}" Label="India">
+                        <chart:AreaSeries ShowEmptyPoints="True" Stroke="#FF1BA1E2" Interior="#781BA1E2" StrokeThickness="2" EnableAnimation="True" ShowTooltip="True" chart:ChartTooltip.EnableAnimation="True" x:Name="SpeedAreaSeries" XBindingPath="Prodname" YBindingPath="Value" ItemsSource="{Binding Speeds}" Label="India">
                         </chart:AreaSeries>
                     </chart:SfChart>
                     <Grid Grid.Row="0">
@@ -160,15 +160,23 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Max/min speed" Style="{StaticResource PhoneTextNormalStyle}"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTrail.FormattedMaxMinSpeed}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Max speed" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTrail.FormattedMaxSpeed}" Style="{StaticResource PhoneTextNormalStyle}"/>
                     </Grid>
                 </StackPanel>
-
-                
-                
             </Grid>
         </ScrollViewer>
+        
+        <!-- share pop-up menu -->
+        <StackPanel Name="ShareMenu" Grid.Row="0" Margin="24,48,24,48" VerticalAlignment="Center" Background="DarkGray" Visibility="Collapsed">
+            <TextBlock Text="Export" Margin="12,6,0,0" Style="{StaticResource PhoneTextTitle2Style}"/>
+            <Button Name="ExportLowRes" Click="ExportLowRes_Click">
+                <TextBlock Text="export low res map" />
+            </Button>
+            <!--<Button Name="ExportHighRes" Click="ExportHighRes_Click">
+                <TextBlock Text="export high res map" />
+            </Button>-->
+        </StackPanel>
     </Grid>
 
 </phone:PhoneApplicationPage>

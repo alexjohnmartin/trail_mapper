@@ -17,14 +17,19 @@ namespace trail_mapper.ViewModels
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public string RecordedDate
+        public string FileName
         {
             get
             {
-                if (History == null || History.Count < 2)
-                    return string.Empty;
+                var filename = "trailmap";
 
-                return "Recorded: " + History.First().Time.ToShortDateString(); //TODO:localize
+                if (!string.IsNullOrEmpty(Name))
+                    filename += "-" + Name.Take(50);
+
+                if (History != null && History.Count > 0)
+                    filename += "-" + History.First().Time.ToString("yyyy-mm-dd-hh-mm-ss");
+
+                return filename;
             }
         }
 
@@ -132,14 +137,16 @@ namespace trail_mapper.ViewModels
         }
 
         [Newtonsoft.Json.JsonIgnore]
-        public string FormattedMaxMinSpeed
+        public string FormattedMaxSpeed
         {
-            get { return (MaxSpeed*3.6).ToString("F2") + "km/h / " + (MinSpeed*3.6).ToString("F2") + "km/h"; }
+            get { return (MaxSpeed*3.6).ToString("F2") + "km/h"; }
         }
 
         [Newtonsoft.Json.JsonIgnore]
         public double TotalElevationGain
         {
+            //TODO:this is way over calculating the elevation gain/loss
+            //I may need to filter out bad altitude data
             get
             {
                 if (History == null || History.Count == 0)

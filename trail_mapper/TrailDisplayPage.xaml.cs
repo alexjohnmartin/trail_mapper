@@ -46,6 +46,11 @@ namespace trail_mapper
             DeleteButton.Click += Delete_Click;
             ApplicationBar.Buttons.Add(DeleteButton);
 
+            var ShareButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.Share.png", UriKind.Relative));
+            ShareButton.Text = "share"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
+            ShareButton.Click += Share_Click;
+            ApplicationBar.Buttons.Add(ShareButton);
+
             var UploadButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.upload.png", UriKind.Relative));
             UploadButton.Text = "upload"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
             UploadButton.Click += Upload_Click;
@@ -74,6 +79,23 @@ namespace trail_mapper
             _uploadHelper.UploadTrailMap(trailMap);
         }
 
+        private void Share_Click(object sender, EventArgs e)
+        {
+            ShareMenu.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void ExportLowRes_Click(object sender, RoutedEventArgs e)
+        {
+            ShareMenu.Visibility = System.Windows.Visibility.Collapsed;
+            SaveMapImageToMediaLibrary(ContentPanel);
+            MessageBox.Show("Map saved to your pictures collection");
+        }
+
+        private void ExportHighRes_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         //private void ShareData_Click(object sender, EventArgs e)
         //{
         //    var filePath = SaveMapImageToMediaLibrary();
@@ -85,9 +107,9 @@ namespace trail_mapper
         //    }
         //}
 
-        private string SaveMapImageToMediaLibrary()
+        private string SaveMapImageToMediaLibrary(UIElement element)
         {
-            var bitmap = new WriteableBitmap(LayoutRoot, null);
+            var bitmap = new WriteableBitmap(element, null);
             using (MemoryStream stream = new MemoryStream())
             {
                 bitmap.SaveJpeg(stream, bitmap.PixelWidth, bitmap.PixelHeight, 0, 100);
@@ -98,7 +120,7 @@ namespace trail_mapper
                     if (source.MediaSourceType == MediaSourceType.LocalDevice)
                     {
                         var mediaLibrary = new MediaLibrary(source);
-                        var filename = "trailmap-" + App.ViewModel.SelectedTrail.Name.Replace(" ", "-");
+                        var filename = App.ViewModel.SelectedTrail.FileName;
                         var picture = mediaLibrary.SavePicture(filename, stream);
                         return picture.GetPath();
                     }
