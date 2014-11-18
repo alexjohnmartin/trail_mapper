@@ -31,12 +31,23 @@ namespace trail_mapper
 
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
-            BuildApplicationBar();
+            //BuildApplicationBar();
         }
 
+        private ApplicationBarIconButton _newTrailButton;
         private void BuildApplicationBar()
         {
             ApplicationBar = new ApplicationBar();
+
+            //if (LocationIsEnabled())
+            //    _newTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.control.record.png", UriKind.Relative));
+            //else
+            //    _newTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.control.record-disabled.png", UriKind.Relative));
+            _newTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.png", UriKind.Relative));
+            _newTrailButton.IsEnabled = IsLocationEnabled();
+            _newTrailButton.Text = "new trail"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
+            _newTrailButton.Click += NewTrailButton_Click;
+            ApplicationBar.Buttons.Add(_newTrailButton);
 
             var SettingsButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.settings.png", UriKind.Relative));
             SettingsButton.Text = "settings"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
@@ -66,7 +77,8 @@ namespace trail_mapper
             if (e.NavigationMode == NavigationMode.New)
             {
                 App.Breadcrumb = "checking location is enabled";
-                if (App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled))
+                var geolocator = new Geolocator();
+                if (geolocator.LocationStatus.Equals(PositionStatus.Disabled))
                     MessageBox.Show("Location services are disabled on your device, you will not be able to record new trails until you enable this in your device's settings", "Location disabled", MessageBoxButton.OK);
             
                 App.Breadcrumb = "checking location consent";
@@ -74,7 +86,7 @@ namespace trail_mapper
                     PromptIfWeCanUseUsersLocation();
             }
 
-            Dispatcher.BeginInvoke(() => UpdateButtons());
+            Dispatcher.BeginInvoke(() => BuildApplicationBar());
         }
 
         private void Settings_Click(object sender, EventArgs e)
@@ -87,7 +99,7 @@ namespace trail_mapper
             NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
         }
 
-        private void NewTrailButton_Click(object sender, RoutedEventArgs e)
+        private void NewTrailButton_Click(object sender, EventArgs e)
         {
             App.Breadcrumb = "new trail button click";
             App.ViewModel.State = RecordingState.New; 
@@ -149,28 +161,25 @@ namespace trail_mapper
 
             IsolatedStorageSettings.ApplicationSettings.Save();
 
-            UpdateButtons();
+            BuildApplicationBar();
         }
 
-        private void UpdateButtons()
+        private bool IsLocationEnabled()
         {
             App.Breadcrumb = "updating buttons on main page";
-            var button = "new trail button";
             try
             {
-                var locationEnabled = IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") &&
-                        bool.Parse(IsolatedStorageSettings.ApplicationSettings["LocationConsent"].ToString()) &&
-                        !App.Geolocator.LocationStatus.Equals(PositionStatus.NotAvailable) &&
-                        !App.Geolocator.LocationStatus.Equals(PositionStatus.Disabled) &&
-                        !App.ViewModel.State.Equals(RecordingState.RecordingStarted);
-
-                NewTrailButton.IsEnabled = locationEnabled;
-                
-                IsolatedStorageSettings.ApplicationSettings.Save();
+                var geolocator = new Geolocator();
+                return IsolatedStorageSettings.ApplicationSettings.Contains("LocationConsent") &&
+                       bool.Parse(IsolatedStorageSettings.ApplicationSettings["LocationConsent"].ToString()) &&
+                       !geolocator.LocationStatus.Equals(PositionStatus.NotAvailable) &&
+                       !geolocator.LocationStatus.Equals(PositionStatus.Disabled) &&
+                       !App.ViewModel.State.Equals(RecordingState.RecordingStarted);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error updating " + button, MessageBoxButton.OK);
+                MessageBox.Show(ex.Message, "Error getting whether location is enabled", MessageBoxButton.OK);
+                return false;
             }
         }
 

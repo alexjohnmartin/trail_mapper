@@ -32,9 +32,9 @@
             <!--<phone:PanoramaItem Header="{Binding Path=LocalizedResources.TrailMapsHeader, Source={StaticResource LocalizedStrings}}">-->
                 <ScrollViewer Margin="12,0,12,0" Grid.Row="1">
                     <StackPanel>
-                        <Button Name="NewTrailButton" Click="NewTrailButton_Click">
+                        <!--<Button Name="_newTrailButton" Click="NewTrailButton_Click">
                             <TextBlock Text="{Binding Path=LocalizedResources.RecordNewTrailButton, Source={StaticResource LocalizedStrings}}"/>
-                        </Button>
+                        </Button>-->
                         <phone:LongListSelector Margin="12,0,12,0" ItemsSource="{Binding MapItems}">
                             <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>

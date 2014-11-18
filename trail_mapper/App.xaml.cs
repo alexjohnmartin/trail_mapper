@@ -21,26 +21,26 @@ namespace trail_mapper
         //public static int DefaultAutoStopInMins = 120;
         //public static string DefaultAccuracy = "High";
 
-        private static Geolocator _geolocator;
-        public static Geolocator Geolocator
-        {
-            get
-            {
-                if (_geolocator == null)
-                {
-                    App.Breadcrumb = "loading geolocator";
-                    _geolocator = new Geolocator();
-                    _geolocator.DesiredAccuracy = PositionAccuracy.High;
-                    _geolocator.MovementThreshold = IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold") ?
-                        double.Parse(IsolatedStorageSettings.ApplicationSettings["MovementThreshold"].ToString()) : DefaultMovementThreshold;
-                }
-                return _geolocator;
-            }
-            set
-            {
-                _geolocator = value;
-            }
-        }
+        //private static Geolocator _geolocator;
+        //public static Geolocator Geolocator
+        //{
+        //    get
+        //    {
+        //        if (_geolocator == null)
+        //        {
+        //            App.Breadcrumb = "loading geolocator";
+        //            _geolocator = new Geolocator();
+        //            _geolocator.DesiredAccuracy = PositionAccuracy.High;
+        //            _geolocator.MovementThreshold = IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold") ?
+        //                double.Parse(IsolatedStorageSettings.ApplicationSettings["MovementThreshold"].ToString()) : DefaultMovementThreshold;
+        //        }
+        //        return _geolocator;
+        //    }
+        //    set
+        //    {
+        //        _geolocator = value;
+        //    }
+        //}
 
         public static bool RunningInBackground { get; set; }
         private void Application_RunningInBackground(object sender, RunningInBackgroundEventArgs args)

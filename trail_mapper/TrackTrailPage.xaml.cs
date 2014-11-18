@@ -32,6 +32,7 @@ namespace trail_mapper
         //private int _autoStopAfterMins = 120;
         private Guid _trailId = Guid.Empty;
         private bool _autoSaved = false;
+        private Geolocator _geolocator;
         private DateTime _recordingStartTime = DateTime.MinValue;
         private DateTime _lastSaveTime = DateTime.MinValue;
         private readonly TimeSpan _timeBetweenAutoSaves = TimeSpan.FromMinutes(5);
@@ -51,14 +52,15 @@ namespace trail_mapper
             Dispatcher.BeginInvoke(() => { UpdateButtons(); UpdateStatistics(); });
             //if (IsolatedStorageSettings.ApplicationSettings.Contains("AutoStopAfterMins"))
             //    _autoStopAfterMins = (int)IsolatedStorageSettings.ApplicationSettings["AutoStopAfterMins"];
+            if (_geolocator == null) GetGeolocator();
         }
 
         protected override void OnRemovedFromJournal(System.Windows.Navigation.JournalEntryRemovedEventArgs e)
         {
-            if (App.Geolocator != null)
+            if (_geolocator != null)
             {
-                App.Geolocator.PositionChanged -= geolocator_PositionChanged;
-                //App.Geolocator = null;
+                _geolocator.PositionChanged -= geolocator_PositionChanged;
+                //_geoLocator = null;
             }
         }
 
@@ -102,9 +104,9 @@ namespace trail_mapper
             _lastSaveTime = DateTime.UtcNow;
             _recordingStartTime = DateTime.UtcNow;
             //_timer = new Timer(Timer_tick, null, 100, 1000);
-            App.Geolocator.PositionChanged += geolocator_PositionChanged;
+            _geolocator.PositionChanged += geolocator_PositionChanged;
 
-            Geoposition position = await App.Geolocator.GetGeopositionAsync();
+            Geoposition position = await _geolocator.GetGeopositionAsync();
             if (position.Coordinate.PositionSource == PositionSource.Satellite)
             {
                 App.ViewModel.TrailHistory.Add(new HistoryItem { Time = DateTime.UtcNow, Altitude = position.Coordinate.Altitude.Value, Latitude = position.Coordinate.Latitude, Longitude = position.Coordinate.Longitude, Speed = position.Coordinate.Speed.Value });
@@ -197,7 +199,7 @@ namespace trail_mapper
 
         private void CorrectTheAppState()
         {
-            if (App.Geolocator != null)
+            if (_geolocator != null)
                 App.ViewModel.State = RecordingState.RecordingStarted;
             else if (App.ViewModel.TrailHistory != null && App.ViewModel.TrailHistory.Count > 0)
                 App.ViewModel.State = RecordingState.RecordingFinished;
@@ -232,14 +234,29 @@ namespace trail_mapper
 
         private void StopTracking()
         {
-            App.Geolocator.PositionChanged -= geolocator_PositionChanged;
-            App.Geolocator = null;
+            _geolocator.PositionChanged -= geolocator_PositionChanged;
+            _geolocator = null;
             //_timer = null;
 
             if (App.ViewModel.TrailHistory.Count > 1)
                 App.ViewModel.State = RecordingState.RecordingFinished;
             else
                 App.ViewModel.State = RecordingState.New;
+        }
+
+        private void GetGeolocator()
+        {
+            if (_geolocator == null)
+            {
+                App.Breadcrumb = "loading geolocator";
+                _geolocator = new Geolocator();
+                _geolocator.DesiredAccuracy = PositionAccuracy.High;
+                _geolocator.MovementThreshold = IsolatedStorageSettings.ApplicationSettings.Contains("MovementThreshold") ?
+                    double.Parse(IsolatedStorageSettings.ApplicationSettings["MovementThreshold"].ToString()) : App.DefaultMovementThreshold;
+
+                if (App.ViewModel.State == RecordingState.RecordingStarted)
+                    _geolocator.PositionChanged += geolocator_PositionChanged;
+            }
         }
     }
 }

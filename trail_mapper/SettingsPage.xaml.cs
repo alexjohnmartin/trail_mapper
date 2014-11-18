@@ -36,7 +36,7 @@ namespace trail_mapper
                     var item = (ListPickerItem)((ListPicker)sender).SelectedItem;
                     if (item == null) return;
                     var accuracy = double.Parse(item.Tag.ToString());
-                    App.Geolocator.MovementThreshold = accuracy;
+                    //App.Geolocator.MovementThreshold = accuracy;
                     IsolatedStorageSettings.ApplicationSettings["MovementThreshold"] = accuracy;
                     IsolatedStorageSettings.ApplicationSettings.Save();
                 });
@@ -51,6 +51,7 @@ namespace trail_mapper
                 {
                     App.Breadcrumb = "allow location changed";
                     IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = true;
+                    IsolatedStorageSettings.ApplicationSettings.Save();
                     UpdateButtons();
                 });
             }
@@ -64,6 +65,7 @@ namespace trail_mapper
                 {
                     App.Breadcrumb = "allow location changed";
                     IsolatedStorageSettings.ApplicationSettings["LocationConsent"] = false;
+                    IsolatedStorageSettings.ApplicationSettings.Save();
                     UpdateButtons();
                 });
             }
