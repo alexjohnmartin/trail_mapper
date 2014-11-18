@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Linq;
 using trail_mapper.Resources;
 using Windows.Devices.Geolocation;
 
@@ -35,6 +36,8 @@ namespace trail_mapper.ViewModels
 
         public void LoadData()
         {
+            //TODO:trigger a data sync
+
             TrailMap trailMap;
             Speeds = new ObservableCollection<model>();
             Altitudes = new ObservableCollection<model>();
@@ -82,6 +85,8 @@ namespace trail_mapper.ViewModels
             {
                 MapItems.Add(trailMap);
                 NotifyPropertyChanged("MapItems");
+
+                //TODO:trigger a data sync
             }
         }
 
@@ -89,6 +94,19 @@ namespace trail_mapper.ViewModels
         {
             MapItems.Remove(trailMap);
             NotifyPropertyChanged("MapItems");
+
+            //TODO:trigger a data sync
+        }
+
+        internal void UpdateSelectedTrailName(string newName)
+        {
+            SelectedTrail.Name = newName;
+            NotifyPropertyChanged("SelectedTrail");
+            var item = MapItems.First(i => i.Id == SelectedTrail.Id);
+            item.Name = newName;
+            NotifyPropertyChanged("MapItems");
+
+            //TODO:trigger a data sync
         }
     }
 }

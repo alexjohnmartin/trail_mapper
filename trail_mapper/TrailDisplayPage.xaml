@@ -85,11 +85,11 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Name}" Margin="9,-7,12,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding SelectedTrail.Name}" Margin="9,-7,12,0" Style="{StaticResource PhoneTextTitle1Style}" Name="MapTitleText"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Path=LocalizedResources.TimeLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding FormattedTotalTime}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTrail.FormattedTotalTime}" Style="{StaticResource PhoneTextNormalStyle}"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Path=LocalizedResources.DistanceLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding FormattedTotalDistance}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedTrail.FormattedTotalDistance}" Style="{StaticResource PhoneTextNormalStyle}"/>
                 </Grid>
                 <!-- map -->
                 <maps:Map x:Name="HereMap" 

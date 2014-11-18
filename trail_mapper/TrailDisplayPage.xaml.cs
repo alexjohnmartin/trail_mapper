@@ -26,9 +26,7 @@ namespace trail_mapper
         public TrailDisplayPage()
         {
             InitializeComponent();
-            DataContext = App.ViewModel.SelectedTrail;
-            AltitudeStackPanel.DataContext = App.ViewModel;
-            SpeedStackPanel.DataContext = App.ViewModel;
+            DataContext = App.ViewModel;
             BuildApplicationBar();
         }
 
@@ -50,6 +48,11 @@ namespace trail_mapper
             ShareButton.Text = "share"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
             ShareButton.Click += Share_Click;
             ApplicationBar.Buttons.Add(ShareButton);
+
+            var EditButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.Edit.png", UriKind.Relative));
+            EditButton.Text = "edit"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
+            EditButton.Click += Edit_Click;
+            ApplicationBar.Buttons.Add(EditButton);
 
             var UploadButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.upload.png", UriKind.Relative));
             UploadButton.Text = "upload"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
@@ -84,16 +87,43 @@ namespace trail_mapper
             ShareMenu.Visibility = System.Windows.Visibility.Visible;
         }
 
-        private void ExportLowRes_Click(object sender, RoutedEventArgs e)
+        private void ExportLowRes_Click(object sender, EventArgs e)
         {
             ShareMenu.Visibility = System.Windows.Visibility.Collapsed;
             SaveMapImageToMediaLibrary(ContentPanel);
             MessageBox.Show("Map saved to your pictures collection");
         }
 
+        private void Edit_Click(object sender, EventArgs e)
+        {
+            var _textBox = new TextBox();
+            _textBox.Text = App.ViewModel.SelectedTrail.Name;
+            var messageBox = new CustomMessageBox
+            {
+                Caption = "Trail name",
+                Message = "",
+                LeftButtonContent = "ok",
+                RightButtonContent = "cancel",
+                Content = _textBox,
+            };
+
+            messageBox.Dismissed += (s, boxEventArgs) => 
+            { 
+                if (boxEventArgs.Result == CustomMessageBoxResult.LeftButton)
+                {
+                    App.ViewModel.UpdateSelectedTrailName(((TextBox)messageBox.Content).Text);
+
+                    var saveHelper = new SaveHelper();
+                    saveHelper.SaveTrail(App.ViewModel.SelectedTrail);
+                }
+            };
+
+            messageBox.Show();
+        }
+
         private void ExportHighRes_Click(object sender, RoutedEventArgs e)
         {
-
+            throw new NotImplementedException();
         }
 
         //private void ShareData_Click(object sender, EventArgs e)
