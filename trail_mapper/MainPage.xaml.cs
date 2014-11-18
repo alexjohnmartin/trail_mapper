@@ -39,10 +39,6 @@ namespace trail_mapper
         {
             ApplicationBar = new ApplicationBar();
 
-            //if (LocationIsEnabled())
-            //    _newTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.control.record.png", UriKind.Relative));
-            //else
-            //    _newTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.control.record-disabled.png", UriKind.Relative));
             _newTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.png", UriKind.Relative));
             _newTrailButton.IsEnabled = IsLocationEnabled();
             _newTrailButton.Text = "new trail"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
@@ -60,7 +56,6 @@ namespace trail_mapper
             ApplicationBar.Buttons.Add(InfoButton);
         }
 
-        // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             App.Breadcrumb = "loading data";
