@@ -31,19 +31,18 @@ namespace trail_mapper
 
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
-            FeedbackOverlay.VisibilityChanged += FeedbackOverlay_VisibilityChanged;
         }
 
-        private ApplicationBarIconButton _newTrailButton;
+        private bool _feedbackOverlayBound = false;
         private void BuildApplicationBar()
         {
             ApplicationBar = new ApplicationBar();
 
-            _newTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.png", UriKind.Relative));
-            _newTrailButton.IsEnabled = IsLocationEnabled();
-            _newTrailButton.Text = "new trail"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
-            _newTrailButton.Click += NewTrailButton_Click;
-            ApplicationBar.Buttons.Add(_newTrailButton);
+            var NewTrailButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.png", UriKind.Relative));
+            NewTrailButton.IsEnabled = IsLocationEnabled();
+            NewTrailButton.Text = "new trail"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
+            NewTrailButton.Click += NewTrailButton_Click;
+            ApplicationBar.Buttons.Add(NewTrailButton);
 
             var SettingsButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.settings.png", UriKind.Relative));
             SettingsButton.Text = "settings"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
@@ -54,6 +53,12 @@ namespace trail_mapper
             InfoButton.Text = "about"; //trail_mapper.Resources.AppResources.AppBarDeleteButtonText;
             InfoButton.Click += Info_Click;
             ApplicationBar.Buttons.Add(InfoButton);
+
+            if (!_feedbackOverlayBound)
+            {
+                FeedbackOverlay.VisibilityChanged += FeedbackOverlay_VisibilityChanged;
+                _feedbackOverlayBound = true;
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
