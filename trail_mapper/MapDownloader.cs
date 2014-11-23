@@ -18,11 +18,11 @@ namespace trail_mapper
     class MapDownloader
     {
         const int MaxPoints = 80;
-        const string width = "1000";
-        const string height = "1000";
-        const string lineWeight = "6";
-        const string lineColor = "FFFF0000";
-        const string shadowColor = "FFFF0000";
+        const string Width = "1000";
+        const string Height = "1000";
+        const string LineWeight = "6";
+        const string LineColor = "FFFF0000";
+        const string ShadowColor = "FFFF0000";
         const string FormatString = "0.00000";
         const string HereMapsAppId = "PC3CUQZkDFZ46i8ifPIL";
         const string HereMapsAppCode = "u_JokeYoH5JkfpvqL2CuFA";
@@ -41,7 +41,7 @@ namespace trail_mapper
             var downloadUrl = string.Empty;
             await Task.Run(() => { 
                 _filename = trailMap.FileName + ".jpg";
-                downloadUrl = string.Format(DownloadUrl, HereMapsAppId, HereMapsAppCode, GetMapPoints(trailMap), GetMarkers(trailMap), lineColor, shadowColor, lineWeight, height, width);
+                downloadUrl = string.Format(DownloadUrl, HereMapsAppId, HereMapsAppCode, GetMapPoints(trailMap), GetMarkers(trailMap), LineColor, ShadowColor, LineWeight, Height, Width);
             });
             var client = new WebClient();
             client.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted_wide);
