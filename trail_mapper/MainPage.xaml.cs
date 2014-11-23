@@ -31,7 +31,7 @@ namespace trail_mapper
 
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
-            //BuildApplicationBar();
+            FeedbackOverlay.VisibilityChanged += FeedbackOverlay_VisibilityChanged;
         }
 
         private ApplicationBarIconButton _newTrailButton;
@@ -142,6 +142,14 @@ namespace trail_mapper
             var emailTask = new EmailComposeTask();
             emailTask.Body = JsonConvert.SerializeObject(map);
             emailTask.Show();
+        }
+        
+        private void FeedbackOverlay_VisibilityChanged(object sender, EventArgs e)
+        {
+            if (ApplicationBar != null)
+            {
+                ApplicationBar.IsVisible = (FeedbackOverlay.Visibility != Visibility.Visible);
+            }
         }
 
         private void PromptIfWeCanUseUsersLocation()

@@ -70,7 +70,8 @@
         <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
 
         <!-- Feedback overlay -->
-        <ctrl:FeedbackOverlay x:Name="FeedbackOverlay"
+        <ctrl:FeedbackOverlay Grid.RowSpan="2"
+                              x:Name="FeedbackOverlay"
                               FeedbackTo="alex.john.martin@gmail.com"
                               ApplicationName="Trail Mapper"
                               CompanyName="Nocturnal Tendencies" Margin="0,-2,0,2"/>
