@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
@@ -115,14 +113,16 @@ namespace trail_mapper
         }
     }
 }
- /*
+/*
+https://developer.here.com/rest-apis/documentation/enterprise-map-image/topics/resource-route.html
+
 http://image.maps.cit.api.here.com/mia/1.6/route
-          ?app_id=DemoAppId01082013GAL
-          &app_code=AJKnXv84fjrb0KIHawS0Tg
-          &r=52.5338,13.2966,52.538361,13.325329
-          &m=52.5338,13.2966,52.538361,13.325329
-          &lc=ff0000ff
-          &sc=ff0000ff
-          &lw=6
-          &h=800&w=1000
+         ?app_id=DemoAppId01082013GAL
+         &app_code=AJKnXv84fjrb0KIHawS0Tg
+         &r=52.5338,13.2966,52.538361,13.325329
+         &m=52.5338,13.2966,52.538361,13.325329
+         &lc=ff0000ff
+         &sc=ff0000ff
+         &lw=6
+         &h=800&w=1000
 */
