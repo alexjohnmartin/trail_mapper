@@ -173,9 +173,9 @@
             <Button Name="ExportLowRes" Click="ExportLowRes_Click">
                 <TextBlock Text="export low res map" />
             </Button>
-            <!--<Button Name="ExportHighRes" Click="ExportHighRes_Click">
+            <Button Name="ExportHighRes" Click="ExportHighRes_Click">
                 <TextBlock Text="export high res map" />
-            </Button>-->
+            </Button>
         </StackPanel>
     </Grid>
 

@@ -87,10 +87,11 @@ namespace trail_mapper
             ShareMenu.Visibility = System.Windows.Visibility.Visible;
         }
 
+        private readonly SaveHelper _saveHelper = new SaveHelper();
         private void ExportLowRes_Click(object sender, EventArgs e)
         {
             ShareMenu.Visibility = System.Windows.Visibility.Collapsed;
-            SaveMapImageToMediaLibrary(ContentPanel);
+            _saveHelper.SaveMapImageToMediaLibrary(ContentPanel, App.ViewModel.SelectedTrail.FileName + "-low");
             MessageBox.Show("Map saved to your pictures collection");
         }
 
@@ -121,9 +122,11 @@ namespace trail_mapper
             messageBox.Show();
         }
 
-        private void ExportHighRes_Click(object sender, RoutedEventArgs e)
+        private async void ExportHighRes_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            ShareMenu.Visibility = System.Windows.Visibility.Collapsed;
+            var downloader = new MapDownloader(Dispatcher);
+            var result = await downloader.DownloadMapImageAsync(App.ViewModel.SelectedTrail);
         }
 
         //private void ShareData_Click(object sender, EventArgs e)
@@ -136,28 +139,6 @@ namespace trail_mapper
         //        shareTask.Show();
         //    }
         //}
-
-        private string SaveMapImageToMediaLibrary(UIElement element)
-        {
-            var bitmap = new WriteableBitmap(element, null);
-            using (MemoryStream stream = new MemoryStream())
-            {
-                bitmap.SaveJpeg(stream, bitmap.PixelWidth, bitmap.PixelHeight, 0, 100);
-                stream.Seek(0, SeekOrigin.Begin);
-
-                foreach (MediaSource source in MediaSource.GetAvailableMediaSources())
-                {
-                    if (source.MediaSourceType == MediaSourceType.LocalDevice)
-                    {
-                        var mediaLibrary = new MediaLibrary(source);
-                        var filename = App.ViewModel.SelectedTrail.FileName;
-                        var picture = mediaLibrary.SavePicture(filename, stream);
-                        return picture.GetPath();
-                    }
-                }
-            }
-            return string.Empty;
-        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
