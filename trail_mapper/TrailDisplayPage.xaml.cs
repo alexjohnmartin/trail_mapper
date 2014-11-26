@@ -18,6 +18,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.PhoneExtensions;
 using trail_mapper.ViewModels;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace trail_mapper
 {
@@ -87,6 +88,18 @@ namespace trail_mapper
             ShareMenu.Visibility = System.Windows.Visibility.Visible;
         }
 
+        public static bool checkNetworkConnection()
+        {
+            var ni = NetworkInterface.NetworkInterfaceType;
+
+            bool IsConnected = false;
+            if ((ni == NetworkInterfaceType.Wireless80211) || (ni == NetworkInterfaceType.MobileBroadbandCdma) || (ni == NetworkInterfaceType.MobileBroadbandGsm))
+                IsConnected = true;
+            else if (ni == NetworkInterfaceType.None)
+                IsConnected = false;
+            return IsConnected;
+        }
+
         private readonly SaveHelper _saveHelper = new SaveHelper();
         private void ExportLowRes_Click(object sender, EventArgs e)
         {
@@ -124,6 +137,9 @@ namespace trail_mapper
 
         private async void ExportHighRes_Click(object sender, RoutedEventArgs e)
         {
+            if (!checkNetworkConnection())
+                MessageBox.Show("You need a data connection to be able to download and export a high-res map", "No data connection", MessageBoxButton.OK);
+
             ShareMenu.Visibility = System.Windows.Visibility.Collapsed;
             var downloader = new MapDownloader(Dispatcher);
             var result = await downloader.DownloadMapImageAsync(App.ViewModel.SelectedTrail);

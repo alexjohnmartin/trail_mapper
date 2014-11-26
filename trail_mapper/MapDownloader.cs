@@ -41,9 +41,17 @@ namespace trail_mapper
                 _filename = trailMap.FileName + ".jpg";
                 downloadUrl = string.Format(DownloadUrl, HereMapsAppId, HereMapsAppCode, GetMapPoints(trailMap), GetMarkers(trailMap), LineColor, ShadowColor, LineWeight, Height, Width);
             });
-            var client = new WebClient();
-            client.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted_wide);
-            client.OpenReadAsync(new Uri(downloadUrl), client);
+
+            try
+            {
+                var client = new WebClient();
+                client.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted_wide);
+                client.OpenReadAsync(new Uri(downloadUrl), client);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
             return true;
         }
 
