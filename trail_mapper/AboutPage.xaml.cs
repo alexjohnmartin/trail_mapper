@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
 using System.Xml.Linq;
@@ -8,6 +9,8 @@ using Microsoft.Live.Controls;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Windows;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace trail_mapper
 {
@@ -70,28 +73,32 @@ namespace trail_mapper
 
         private async void Upload_Click(object sender, EventArgs e)
         {
+            Dispatcher.BeginInvoke(() => UploadTrailMaps());
+        }
+
+        private async void UploadTrailMaps()
+        {
             if (client != null)
             {
                 try
                 {
-                    string fileName = "sample.txt";
-                    IsolatedStorageFile myIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication();
-                    
-                    //deletes the file if it already exists
-                    if (myIsolatedStorage.FileExists(fileName))
+                    using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
                     {
-                        myIsolatedStorage.DeleteFile(fileName);
+                        var filenames = iso.GetFileNames(@"*");
+                        if (filenames.Any())
+                        {
+                            string skyDriveFolder = await CreateDirectoryAsync(client, "TrailMaps", "me/skydrive");
+                            foreach (var filename in filenames)
+                            {
+                                if (filename.EndsWith(".json"))
+                                {
+                                    var isfs = iso.OpenFile(filename, FileMode.Open, FileAccess.Read);
+                                    var res = await client.UploadAsync(skyDriveFolder, filename, isfs, OverwriteOption.Overwrite);
+                                }
+                            }
+                            MessageBox.Show(string.Format("{0} trail maps uploaded", filenames.Count()));
+                        }
                     }
-                    
-                    //now we use a StreamWriter to write inputBox.Text to the file and save it to IsolatedStorage
-                    using (StreamWriter writeFile = new StreamWriter
-                    (new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, myIsolatedStorage)))
-                    {
-                        writeFile.WriteLine("Hello world");
-                        writeFile.Close();
-                    }
-                    IsolatedStorageFileStream isfs = myIsolatedStorage.OpenFile(fileName, FileMode.Open, FileAccess.Read);
-                    var res = await client.UploadAsync("me/skydrive", fileName, isfs, OverwriteOption.Overwrite);
                 }
                 catch (Exception ex)
                 {
@@ -102,6 +109,40 @@ namespace trail_mapper
             {
                 MessageBox.Show("Please sign in with your Microsoft Account.");
             }
+        }
+
+        protected async Task<string> CreateDirectoryAsync(LiveConnectClient client, string folderName, string parentFolder)
+        {
+            string folderId = null;
+
+            // Retrieves all the directories.
+            var queryFolder = parentFolder + "/files?filter=folders,albums";
+            var opResult = await client.GetAsync(queryFolder);
+            dynamic result = opResult.Result;
+
+            foreach (dynamic folder in result.data)
+            {
+                // Checks if current folder has the passed name.
+                if (folder.name.ToLowerInvariant() == folderName.ToLowerInvariant())
+                {
+                    folderId = folder.id;
+                    break;
+                }
+            }
+
+            if (folderId == null)
+            {
+                // Directory hasn't been found, so creates it using the PostAsync method.
+                var folderData = new Dictionary<string, object>();
+                folderData.Add("name", folderName);
+                opResult = await client.PostAsync(parentFolder, folderData);
+                result = opResult.Result;
+
+                // Retrieves the id of the created folder.
+                folderId = result.id;
+            }
+
+            return folderId;
         }
 
         public void TwitterButton_Click(object sender, EventArgs e)
