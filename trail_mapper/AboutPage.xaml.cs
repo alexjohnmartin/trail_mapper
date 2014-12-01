@@ -11,6 +11,7 @@ using System.IO;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Phone.Shell;
 
 namespace trail_mapper
 {
@@ -21,6 +22,7 @@ namespace trail_mapper
         public AboutPage()
         {
             InitializeComponent();
+            DataContext = App.ViewModel;
         }
 
         private void loginButton_SessionChanged(object sender, LiveConnectSessionChangedEventArgs e)
@@ -73,7 +75,12 @@ namespace trail_mapper
 
         private async void Upload_Click(object sender, EventArgs e)
         {
-            Dispatcher.BeginInvoke(() => UploadTrailMaps());
+            App.ViewModel.IsBusy = true;
+
+            Dispatcher.BeginInvoke(() =>
+            {
+                UploadTrailMaps();
+            });
         }
 
         private async void UploadTrailMaps()
@@ -109,6 +116,7 @@ namespace trail_mapper
             {
                 MessageBox.Show("Please sign in with your Microsoft Account.");
             }
+            Dispatcher.BeginInvoke(() => App.ViewModel.IsBusy = false);
         }
 
         protected async Task<string> CreateDirectoryAsync(LiveConnectClient client, string folderName, string parentFolder)

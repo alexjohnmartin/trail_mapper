@@ -108,5 +108,14 @@ namespace trail_mapper.ViewModels
 
             //TODO:trigger a data sync
         }
+
+        private bool _IsBusy = false;
+        public bool IsBusy
+        {
+            get { return _IsBusy; }
+            set { _IsBusy = value; NotifyPropertyChanged("IsBusy"); }
+        }
+
+        //http://stackoverflow.com/questions/19554262/how-do-i-display-loading-bar-for-windows-phone-8-app-using-mvvm
     }
 }
