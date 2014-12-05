@@ -58,6 +58,27 @@ namespace trail_mapper.ViewModels
         }
 
         [Newtonsoft.Json.JsonIgnore]
+        public DateTime RecordedDate
+        {
+            get
+            {
+                if (History == null || History.Count < 2)
+                    return DateTime.MinValue;
+
+                return History.First().Time;
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string FormattedRecordedDate
+        {
+            get
+            {
+                return RecordedDate.ToShortDateString() + " - " + RecordedDate.ToShortTimeString();
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
         public double TotalDistance
         {
             get

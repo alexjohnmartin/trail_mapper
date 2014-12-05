@@ -55,15 +55,26 @@ namespace trail_mapper.ViewModels
                             {
                                 var json = reader.ReadToEnd();
                                 trailMap = JsonConvert.DeserializeObject<TrailMap>(json);
-                                MapItems.Add(trailMap);
+
+                                var index = 0;
+                                var added = false;
+                                foreach (var map in MapItems)
+                                {
+                                    if (trailMap.RecordedDate > map.RecordedDate)
+                                    {
+                                        break;
+                                    }
+                                    index++;
+                                }
+                                MapItems.Insert(index, trailMap);
                             }
                         }                        
                     }
                 }
 
                 //example data
-                trailMap = JsonConvert.DeserializeObject<TrailMap>(ExampleJson);
-                MapItems.Add(trailMap);
+                //trailMap = JsonConvert.DeserializeObject<TrailMap>(ExampleJson);
+                //MapItems.Add(trailMap);
             }
 
             this.IsDataLoaded = true;

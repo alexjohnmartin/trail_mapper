@@ -46,7 +46,7 @@
                                         <StackPanel Width="311" Margin="12,-7,0,0">
                                             <TextBlock Text="{Binding Name}" Margin="0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
                                             <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
-                                            <TextBlock Text="{Binding RecordedDate}" TextWrapping="Wrap" Margin="0,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                            <TextBlock Text="{Binding FormattedRecordedDate}" TextWrapping="Wrap" Margin="0,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
                                         </StackPanel>
                                         <toolkit:ContextMenuService.ContextMenu>
                                             <toolkit:ContextMenu IsZoomEnabled="True">
