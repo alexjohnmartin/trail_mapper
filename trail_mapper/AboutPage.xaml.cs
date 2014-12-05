@@ -18,11 +18,34 @@ namespace trail_mapper
     public partial class AboutPage : PhoneApplicationPage
     {
         private LiveConnectClient client;
+        private LiveAuthClient authClient;
+        private const string clientId = "00000000441169AA";
+        private string[] scopes = new string[] { "wl.signin", "wl.skydrive", "wl.skydrive_update" };
 
         public AboutPage()
         {
             InitializeComponent();
             DataContext = App.ViewModel;
+            InitializeLiveSdkConnection();
+        }
+
+        private async void InitializeLiveSdkConnection()
+        {
+            try
+            {
+                authClient = new LiveAuthClient(clientId);
+                LiveLoginResult loginResult = await authClient.InitializeAsync(scopes);
+                if (loginResult.Status == LiveConnectSessionStatus.Connected)
+                {
+                    ConnectButton.IsEnabled = false;
+                    client = new LiveConnectClient(loginResult.Session);
+                    //this.GetMe();
+                }
+            }
+            catch (LiveAuthException authExp)
+            {
+                MessageBox.Show(authExp.ToString(), "LiveSDK error", MessageBoxButton.OK);
+            }
         }
 
         private void loginButton_SessionChanged(object sender, LiveConnectSessionChangedEventArgs e)
@@ -47,8 +70,8 @@ namespace trail_mapper
             bool connected = false;
             try
             {
-                var authClient = new LiveAuthClient("00000000441169AA");
-                LiveLoginResult result = await authClient.LoginAsync(new string[] { "wl.signin", "wl.skydrive", "wl.skydrive_update" });
+                var authClient = new LiveAuthClient(clientId);
+                LiveLoginResult result = await authClient.LoginAsync(scopes);
 
                 if (result.Status == LiveConnectSessionStatus.Connected)
                 {
