@@ -45,29 +45,22 @@ namespace trail_mapper.ViewModels
             MapItems = new ObservableCollection<TrailMap>(); 
             using (var iso = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                foreach (var filename in iso.GetFileNames(@"*"))
+                foreach (var filename in iso.GetFileNames(@"*").Where(f => f.EndsWith(".json")))
                 {
-                    if (filename.EndsWith(".json"))
+                    using (IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream(filename, FileMode.Open, iso))
+                    using (StreamReader reader = new StreamReader(isoStream))
                     {
-                        using (IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream(filename, FileMode.Open, iso))
-                        {
-                            using (StreamReader reader = new StreamReader(isoStream))
-                            {
-                                var json = reader.ReadToEnd();
-                                trailMap = JsonConvert.DeserializeObject<TrailMap>(json);
+                        var json = reader.ReadToEnd();
+                        trailMap = JsonConvert.DeserializeObject<TrailMap>(json);
 
-                                var index = 0;
-                                foreach (var map in MapItems)
-                                {
-                                    if (trailMap.RecordedDate > map.RecordedDate)
-                                    {
-                                        break;
-                                    }
-                                    index++;
-                                }
-                                MapItems.Insert(index, trailMap);
-                            }
-                        }                        
+                        var index = 0;
+                        foreach (var map in MapItems)
+                        {
+                            if (trailMap.RecordedDate > map.RecordedDate) break;
+
+                            index++;
+                        }
+                        MapItems.Insert(index, trailMap);
                     }
                 }
 
