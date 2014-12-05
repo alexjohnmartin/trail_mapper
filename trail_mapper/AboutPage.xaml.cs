@@ -20,7 +20,7 @@ namespace trail_mapper
         private LiveConnectClient client;
         private LiveAuthClient authClient;
         private const string clientId = "00000000441169AA";
-        private string[] scopes = new string[] { "wl.signin", "wl.skydrive", "wl.skydrive_update" };
+        private string[] scopes = new string[] { "wl.signin", "wl.basic", "wl.offline_access", "wl.skydrive", "wl.skydrive_update" };
 
         public AboutPage()
         {
