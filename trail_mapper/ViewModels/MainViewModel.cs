@@ -57,7 +57,6 @@ namespace trail_mapper.ViewModels
                                 trailMap = JsonConvert.DeserializeObject<TrailMap>(json);
 
                                 var index = 0;
-                                var added = false;
                                 foreach (var map in MapItems)
                                 {
                                     if (trailMap.RecordedDate > map.RecordedDate)
