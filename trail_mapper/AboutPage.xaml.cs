@@ -39,12 +39,11 @@ namespace trail_mapper
                 {
                     ConnectButton.IsEnabled = false;
                     client = new LiveConnectClient(loginResult.Session);
-                    //this.GetMe();
                 }
             }
             catch (LiveAuthException authExp)
             {
-                MessageBox.Show(authExp.ToString(), "LiveSDK error", MessageBoxButton.OK);
+                MessageBox.Show(authExp.ToString(), "OneDrive error", MessageBoxButton.OK);
             }
         }
 
@@ -80,6 +79,19 @@ namespace trail_mapper
                     //var meResult = await connectClient.GetAsync("me");
                     //dynamic meData = meResult.Result;
                     //updateUI(meData);
+
+
+
+
+                    //TODO:get list of existing files
+                    string skyDriveFolder = await CreateDirectoryAsync(client, "TrailMaps", "me/skydrive");
+                    var downloadResult = await client.GetAsync(skyDriveFolder);
+                    List<object> items = downloadResult.Result["data"] as List<object>;
+
+
+
+
+
                 }
             }
             catch (LiveAuthException ex)

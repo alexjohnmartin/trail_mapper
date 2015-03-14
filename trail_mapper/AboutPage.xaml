@@ -31,7 +31,8 @@
             <TextBlock Text="about" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <ScrollViewer Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel">
             <Grid.RowDefinitions>
                 <RowDefinition Height="85" />
                 <RowDefinition Height="210" />
@@ -105,6 +106,7 @@
 
 
         </Grid>
+        </ScrollViewer>
     </Grid>
 
 </phone:PhoneApplicationPage>
